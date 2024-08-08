@@ -1,4 +1,4 @@
-package org.hidog.config.service;
+package org.hidog.config.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
