@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListBoardController {
 
+
     @ModelAttribute("menuCode")
     public String getMenuCode() {
         return "board";
@@ -39,6 +40,9 @@ public class ListBoardController {
     //게시판 목록 페이지
     @GetMapping
     public String list() {
+
+
+
         return "board/list";
     }
 
