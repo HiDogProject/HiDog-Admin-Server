@@ -14,6 +14,8 @@
                 <th width="180">게시판 아이디</th>
                 <td>
                     <input type="text" name="bid" th:field="*{bid}">
+                    <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
+                    <div class="error" th:if="${#fields.hasErrors('bid')}" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
@@ -26,6 +28,7 @@
                 <th>게시판 이름</th>
                 <td>
                     <input type="text" name="bName" th:field="*{bName}">
+                    <div class="error" th:each="err : ${#fields.errors('bName')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
@@ -33,27 +36,31 @@
                 <td>
                     <input type="radio" name="active" th:field="*{active}" value="true" checked="checked">사용
                     <input type="radio" name="active" th:field="*{active}" value="false">미사용
+                    <div class="error" th:each="err : ${#fields.errors('active')}" th:text="${err}"></div>
                 </td>
             </tr>
         </table>
         <h2>페이징 설정</h2>
         <table class="table_cols mb30">
             <tr>
-                <th width="180">1페이지 당 게시글 수</th>
+                <th width="180">페이지 당 게시글 수</th>
                 <td>
                     <input type="number" min="1" max="40" step="1" placeholder="" name="rowsPerPage" th:field="*{rowsPerPage}" />
+                    <div class="error" th:each="err : ${#fields.errors('rowsPerPage')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
                 <th>PC버전 페이지 구간 갯수</th>
                 <td>
                     <input type="number" min="1" max="40" step="1" placeholder="" name="pageCountPc" th:field="*{pageCountPc}" />
+                    <div class="error" th:each="err : ${#fields.errors('pageCountPc')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
                 <th>Mobile버전 페이지 구간 갯수 </th>
                 <td>
                     <input type="number" min="1" max="40" step="1" placeholder="" name="pageCountMobile" th:field="*{pageCountMobile}" />
+                    <div class="error" th:each="err : ${#fields.errors('pageCountMobile')}" th:text="${err}"></div>
                 </td>
             </tr>
         </table>
@@ -71,6 +78,7 @@
                 <td>
                     <input type="radio" name="useComment"  th:field="*{useComment}" value="true" >사용
                     <input type="radio" name="useComment" th:field="*{useComment}" value="false" >미사용
+                    <div class="error" th:each="err : ${#fields.errors('useComment')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
@@ -78,6 +86,7 @@
                 <td>
                     <input type="radio" name="useEditor" th:field="*{useEditor}" value="true" checked="checked" >사용
                     <input type="radio" name="useEditor" th:field="*{useEditor}" value="false">미사용
+                    <div class="error" th:each="err : ${#fields.errors('useEditor')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
@@ -85,6 +94,7 @@
                 <td>
                     <input type="radio" name="useUploadImage" th:field="*{useUploadImage}" value="true"  checked="checked" >사용
                     <input type="radio" name="useUploadImage" th:field="*{useUploadImage}" value="false">미사용
+                    <div class="error" th:each="err : ${#fields.errors('useUploadImage')}" th:text="${err}"></div>
                 </td>
             </tr>
             <tr>
@@ -92,6 +102,7 @@
                 <td>
                     <input type="radio" name="useUploadFile" th:field="*{useUploadFile}" value="true" checked="checked" >사용
                     <input type="radio" name="useUploadFile" th:field="*{useUploadFile}" value="false">미사용
+                    <div class="error" th:each="err : ${#fields.errors('useUploadFile')}" th:text="${err}"></div>
                 </td>
             </tr>
         </table>
