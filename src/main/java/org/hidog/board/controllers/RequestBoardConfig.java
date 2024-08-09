@@ -28,8 +28,6 @@ public class RequestBoardConfig {
 
     private int pageCountMobile = 5; // Mobile 페이지 구간 갯수
 
-    private boolean useReply; // 답글 사용 여부
-
     private boolean useComment; // 댓글 사용 여부
 
     private boolean useEditor; // 에디터 사용 여부
@@ -37,10 +35,6 @@ public class RequestBoardConfig {
     private boolean useUploadImage; // 이미지 첨부 사용 여부
 
     private boolean useUploadFile; // 파일 첨부 사용 여부
-
-    private String locationAfterWriting = "list"; // 글 작성 후 이동 위치
-
-    private boolean showListBelowView; // 글 보기 하단 목록 노출 여부
 
     private String category; // 게시판 분류
 }

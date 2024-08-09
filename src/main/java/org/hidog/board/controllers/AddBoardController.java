@@ -1,5 +1,7 @@
 package org.hidog.board.controllers;
 
+import lombok.RequiredArgsConstructor;
+import org.hidog.board.services.BoardConfigSaveService;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;
 import org.springframework.stereotype.Controller;
@@ -12,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/board")
 public class AddBoardController {
+
+    private final BoardConfigSaveService saveService;
 
 
     @ModelAttribute("menuCode")
@@ -45,7 +50,8 @@ public class AddBoardController {
 
     //게시판 등록
     @PostMapping("/add")
-    public String add(){
-        return "redirect:/board/add";
+    public String add(RequestBoardConfig form, Model model){
+        saveService.save(form);
+        return "redirect:/board";
     }
 }
