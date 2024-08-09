@@ -1,8 +1,8 @@
 package org.hidog.config.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.hidog.config.service.ConfigInfoService;
-import org.hidog.config.service.ConfigSaveService;
+import org.hidog.config.services.ConfigInfoService;
+import org.hidog.config.services.ConfigSaveService;
 import org.hidog.global.exceptions.ExceptionProcessor;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;

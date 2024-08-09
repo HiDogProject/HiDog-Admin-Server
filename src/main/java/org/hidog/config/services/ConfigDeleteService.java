@@ -1,4 +1,4 @@
-package org.hidog.config.service;
+package org.hidog.config.services;
 
 import lombok.RequiredArgsConstructor;
 import org.hidog.config.entities.Configs;
