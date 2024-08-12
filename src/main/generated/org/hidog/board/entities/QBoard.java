@@ -30,11 +30,20 @@ public class QBoard extends EntityPathBase<Board> {
     public final StringPath category = createString("category");
 
     //inherited
-    public final StringPath createBy = _super.createBy;
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final StringPath gid = createString("gid");
 
     public final NumberPath<Integer> listOrder = createNumber("listOrder", Integer.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
