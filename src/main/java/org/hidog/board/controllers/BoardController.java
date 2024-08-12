@@ -1,5 +1,6 @@
 package org.hidog.board.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hidog.board.services.BoardConfigSaveService;
 import org.hidog.board.validators.BoardConfigValidator;
@@ -10,6 +11,7 @@ import org.hidog.menus.MenuDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class BoardController implements ExceptionProcessor {
 
     private final Utils utils;
 
-    private final BoardConfigSaveService saveService;
+    private final BoardConfigSaveService configSaveService;
     private final BoardConfigValidator validator;
 
     @ModelAttribute
@@ -74,7 +76,12 @@ public class BoardController implements ExceptionProcessor {
 
     //게시글 등록 or 수정 처리
     @PostMapping("/save")
-    public String save(){
+    public String save(@Valid RequestBoardConfig config, Model model, Errors errors ){
+        String mode = config.getMode();
+        commonProcess(mode, model);
+
+        configSaveService.save(config);
+
         return "redirect:" + utils.redirectUrl("/board");
     }
 
