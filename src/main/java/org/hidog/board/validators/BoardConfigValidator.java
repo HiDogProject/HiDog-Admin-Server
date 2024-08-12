@@ -1,5 +1,6 @@
 package org.hidog.board.validators;
 
+
 import lombok.RequiredArgsConstructor;
 import org.hidog.board.controllers.RequestBoardConfig;
 import org.hidog.board.repositories.BoardRepository;
@@ -31,4 +32,3 @@ public class BoardConfigValidator implements Validator {
         }
     }
 }
-
