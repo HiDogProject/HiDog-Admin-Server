@@ -62,9 +62,13 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> pageCountPc = createNumber("pageCountPc", Integer.class);
 
+    public final EnumPath<org.hidog.member.constants.Authority> replyAccessType = createEnum("replyAccessType", org.hidog.member.constants.Authority.class);
+
     public final NumberPath<Integer> rowsPerPage = createNumber("rowsPerPage", Integer.class);
 
     public final BooleanPath showListBelowView = createBoolean("showListBelowView");
+
+    public final StringPath skin = createString("skin");
 
     public final BooleanPath useComment = createBoolean("useComment");
 

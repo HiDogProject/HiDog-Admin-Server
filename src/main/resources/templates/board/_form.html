@@ -20,10 +20,11 @@
             <th width="180">게시판 아이디</th>
             <td th:if="*{mode != 'edit'}">
                 <input type="text" name="bid" th:field="*{bid}">
+
                 <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
             </td>
-            <td th:if="*{mode == 'edit'}"> <!--수정일때-->
-                <input type="text" name="bid" th:field="*{bid}">
+            <td th:if="*{mode == 'edit'}"> <!-- 수정 -->
+                <input type="hidden" name="bid" th:field="*{bid}">
                 <th:block th:text="*{bid}"></th:block>
             </td>
         </tr>

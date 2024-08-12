@@ -2,6 +2,7 @@ package org.hidog.board.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hidog.board.services.BoardConfigInfoService;
 import org.hidog.board.services.BoardConfigSaveService;
 import org.hidog.board.validators.BoardConfigValidator;
 import org.hidog.global.Utils;
@@ -25,6 +26,7 @@ public class BoardController implements ExceptionProcessor {
     private final Utils utils;
 
     private final BoardConfigSaveService configSaveService;
+    private final BoardConfigInfoService configInfoService;
     private final BoardConfigValidator validator;
 
     @ModelAttribute
@@ -64,13 +66,19 @@ public class BoardController implements ExceptionProcessor {
 
     //게시판 등록 페이지
     @GetMapping("/add")
-    public String list(@ModelAttribute RequestBoardConfig form) {
+    public String list(@ModelAttribute RequestBoardConfig form, Model model) {
+        commonProcess("add", model);
         return "board/add";
     }
 
     //게시판 수정 페이지
     @GetMapping("/edit/{bid}")
     public String add(@PathVariable("bid") String bid, Model model){
+
+        commonProcess("edit", model);
+        RequestBoardConfig form = configInfoService.getForm(bid);
+        model.addAttribute("requestBoardConfig", form);
+
         return "board/edit";
     }
 
@@ -79,6 +87,10 @@ public class BoardController implements ExceptionProcessor {
     public String save(@Valid RequestBoardConfig config, Model model, Errors errors ){
         String mode = config.getMode();
         commonProcess(mode, model);
+        validator.validate(config, errors);
+        if (errors.hasErrors()) {
+            return "board/" + mode;
+        }
 
         configSaveService.save(config);
 
