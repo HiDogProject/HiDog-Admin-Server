@@ -20,13 +20,19 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final org.hidog.global.entities.QBaseEntity _super = new org.hidog.global.entities.QBaseEntity(this);
 
     public final StringPath address = createString("address");
 
     public final ListPath<Authorities, QAuthorities> authorities = this.<Authorities, QAuthorities>createList("authorities", Authorities.class, QAuthorities.class, PathInits.DIRECT2);
 
-    public final StringPath detailAddress = createString("detailAddress");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
+
+    public final StringPath detailAddress = createString("detailAddress");
 
     public final StringPath email = createString("email");
 
