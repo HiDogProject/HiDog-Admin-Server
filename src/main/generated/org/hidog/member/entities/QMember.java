@@ -20,13 +20,18 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+
     public final StringPath address = createString("address");
 
     public final ListPath<Authorities, QAuthorities> authorities = this.<Authorities, QAuthorities>createList("authorities", Authorities.class, QAuthorities.class, PathInits.DIRECT2);
 
     public final StringPath detailAddress = createString("detailAddress");
 
+
     public final StringPath email = createString("email");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final StringPath password = createString("password");
 

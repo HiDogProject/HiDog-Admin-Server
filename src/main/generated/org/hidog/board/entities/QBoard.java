@@ -29,12 +29,31 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath category = createString("category");
 
+    public final EnumPath<org.hidog.member.constants.Authority> commentAccessType = createEnum("commentAccessType", org.hidog.member.constants.Authority.class);
+
     //inherited
-    public final StringPath createBy = _super.createBy;
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final StringPath gid = createString("gid");
 
+    public final StringPath htmlBottom = createString("htmlBottom");
+
+    public final StringPath htmlTop = createString("htmlTop");
+
+    public final EnumPath<org.hidog.member.constants.Authority> listAccessType = createEnum("listAccessType", org.hidog.member.constants.Authority.class);
+
     public final NumberPath<Integer> listOrder = createNumber("listOrder", Integer.class);
+
+    public final StringPath locationAfterWriting = createString("locationAfterWriting");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
@@ -43,15 +62,27 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> pageCountPc = createNumber("pageCountPc", Integer.class);
 
+    public final EnumPath<org.hidog.member.constants.Authority> replyAccessType = createEnum("replyAccessType", org.hidog.member.constants.Authority.class);
+
     public final NumberPath<Integer> rowsPerPage = createNumber("rowsPerPage", Integer.class);
+
+    public final BooleanPath showListBelowView = createBoolean("showListBelowView");
+
+    public final StringPath skin = createString("skin");
 
     public final BooleanPath useComment = createBoolean("useComment");
 
     public final BooleanPath useEditor = createBoolean("useEditor");
 
+    public final BooleanPath useReply = createBoolean("useReply");
+
     public final BooleanPath useUploadFile = createBoolean("useUploadFile");
 
     public final BooleanPath useUploadImage = createBoolean("useUploadImage");
+
+    public final EnumPath<org.hidog.member.constants.Authority> viewAccessType = createEnum("viewAccessType", org.hidog.member.constants.Authority.class);
+
+    public final EnumPath<org.hidog.member.constants.Authority> writeAccessType = createEnum("writeAccessType", org.hidog.member.constants.Authority.class);
 
     public QBoard(String variable) {
         super(Board.class, forVariable(variable));
