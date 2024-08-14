@@ -6,7 +6,7 @@
     <div th:replace="~{common/_message::message}"></div>
     <h1>게시판 목록</h1>
     <h2>게시판 조회</h2>
-    <form name="frmSearch" method="get" th:value="${@utils.redirectUrl('/board')}" autocomplete="off" th:object="${boardSearch}">
+    <form name="frmSearch" method="get" th:action="${@utils.redirectUrl('/board')}" autocomplete="off" th:object="${boardSearch}">
         <table class="table_cols mb30">
             <tr>
                 <th>키워드</th>
@@ -28,7 +28,7 @@
     </form>
 
     <h2>게시판 목록</h2>
-    <form name="frmList" method="post" th:action="${@utils.redirectUrl('/board')}" target="ifrmProcess" autocomplete="off">
+    <form name="frmList" method="post" th:action="${@utils.redirectUrl('/board')}" target="ifrmHidden" autocomplete="off">
         <input type="hidden" name="_method" value="PATCH">
 
         <table class="table_rows">
@@ -74,6 +74,11 @@
             </tr>
             </tbody>
         </table>
+        <dic class="table_actions">
+            <button type="button" class="sbtn form_action" data-mode="delete" data-form-name="frmList">선택 게시판 삭제</button>
+            <button type="button" class="sbtn on form_action" data-mode="edit" data-form-name="frmList">선택 게시판 수정</button>
+        </dic>
     </form>
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>
 </html>

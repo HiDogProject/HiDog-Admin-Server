@@ -79,7 +79,7 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @PatchMapping
-    public String editList(@RequestParam List<Integer> chks, Model model) {
+    public String editList(@RequestParam("chk") List<Integer> chks, Model model) {
         commonProcess("list", model);
         configSaveService.saveList(chks);
         model.addAttribute("script", "parent.location.reload()");
@@ -92,9 +92,11 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @DeleteMapping
-    public String deleteList(@RequestParam List<Integer> chks, Model model){
+    public String deleteList(@RequestParam("chk") List<Integer> chks, Model model){
         commonProcess("list", model);
+        chks.forEach(System.out::println);
         configDeleteService.deleteList(chks);
+        model.addAttribute("script", "parent.location.reload()");
         return "common/_execute_script";
     }
 
@@ -107,7 +109,6 @@ public class BoardController implements ExceptionProcessor {
     @GetMapping("/add")
     public String add(@ModelAttribute RequestBoardConfig config, Model model) {
         commonProcess("add", model);
-
         return "board/add";
     }
 
