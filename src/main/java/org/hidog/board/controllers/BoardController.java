@@ -48,7 +48,11 @@ public class BoardController implements ExceptionProcessor {
     }
 
 
-    //게시판 목록 페이지
+    /**
+     * 게시판 목록 페이지
+     * @param model
+     * @return
+     */
     @GetMapping
     public String list(Model model) {
         commonProcess("list", model);
@@ -57,26 +61,42 @@ public class BoardController implements ExceptionProcessor {
         return "board/list";
     }
 
-    //게시판 수정
+    /**
+     * 게시판 수정
+     * @return
+     */
     @PatchMapping
     public String editList(){
         return "board/edit";
     }
 
-    //게시판 삭제
+    /**
+     * 게시판 삭제
+     * @return
+     */
     @DeleteMapping
     public String deleteList(){
         return "board/delete";
     }
 
-    //게시판 등록 페이지
+    /**
+     * 게시판 등록 페이지
+     * @param form
+     * @param model
+     * @return
+     */
     @GetMapping("/add")
     public String list(@ModelAttribute RequestBoardConfig form, Model model) {
         commonProcess("add", model);
         return "board/add";
     }
 
-    //게시판 수정 페이지
+    /**
+     * 게시판 수정 페이지
+     * @param bid
+     * @param model
+     * @return
+     */
     @GetMapping("/edit/{bid}")
     public String add(@PathVariable("bid") String bid, Model model){
 
@@ -87,7 +107,13 @@ public class BoardController implements ExceptionProcessor {
         return "board/edit";
     }
 
-    //게시글 등록 or 수정 처리
+    /**
+     * 게시글 등록 or 수정 처리
+     * @param config
+     * @param model
+     * @param errors
+     * @return
+     */
     @PostMapping("/save")
     public String save(@Valid RequestBoardConfig config, Model model, Errors errors ){
         String mode = config.getMode();
@@ -103,7 +129,11 @@ public class BoardController implements ExceptionProcessor {
     }
 
 
-    //게시글 관리
+    /**
+     * 게시글 관리
+     * @param model
+     * @return
+     */
     @GetMapping("/posts")
     public String posts(Model model){
         return "board/posts";
