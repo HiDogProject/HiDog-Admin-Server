@@ -63,13 +63,6 @@ public class BoardConfigInfoService {
         return form;
     }
 
-    public List<Board> getList(){
-        QBoard board = QBoard.board;
-        List<Board> items = (List<Board>)boardRepository.findAll(board.active.eq(true), Sort.by(desc("listOrder"), desc("createdAt")));
-
-        return items;
-    }
-
     public ListData<Board> getList(BoardSearch search, boolean isAll){
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
@@ -153,75 +146,6 @@ public class BoardConfigInfoService {
     }
 
     /**
-     * 게시판 설정 목록
-     *
-     * @param search
-     * @return
-     */
-    public ListData<Board> getList(BoardSearch search, boolean isAll) {
-        int page = Math.max(search.getPage(), 1);
-        int limit = search.getLimit();
-        limit = limit < 1 ? 20 : limit;
-        QBoard board = QBoard.board;
-        BooleanBuilder andBuilder = new BooleanBuilder();
-
-        /* 검색 조건 처리 S */
-        String bid = search.getBid();
-        List<String> bids = search.getBids();
-        String bName = search.getBName();
-
-        String sopt = search.getSopt();
-        sopt = StringUtils.hasText(sopt) ? sopt.trim() : "ALL";
-        String skey = search.getSkey(); // 키워드
-
-        if (StringUtils.hasText(bid)) { // 게시판 ID
-            andBuilder.and(board.bid.contains(bid.trim()));
-        }
-
-        // 게시판 ID 여러개 조회
-        if (bids != null && !bids.isEmpty()) {
-            andBuilder.and(board.bid.in(bids));
-        }
-
-        if (!isAll) { // 노출 상태인 게시판 만 조회
-            andBuilder.and(board.active.eq(true));
-        }
-
-        if (StringUtils.hasText(bName)) { // 게시판 명
-            andBuilder.and(board.bName.contains(bName.trim()));
-        }
-
-
-        // 조건별 키워드 검색
-        if (StringUtils.hasText(skey)) {
-            skey = skey.trim();
-
-            BooleanExpression cond1 = board.bid.contains(skey);
-            BooleanExpression cond2 = board.bName.contains(skey);
-
-            if (sopt.equals("bid")) {
-                andBuilder.and(cond1);
-            } else if (sopt.equals("bName")) {
-                andBuilder.and(cond2);
-            } else { // 통합검색 : bid + bName
-                BooleanBuilder orBuilder = new BooleanBuilder();
-                orBuilder.or(cond1)
-                        .or(cond2);
-                andBuilder.and(orBuilder);
-            }
-        }
-
-        /* 검색 조건 처리 E */
-
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
-        Page<Board> data = boardRepository.findAll(andBuilder, pageable);
-
-        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), limit, 10, request);
-
-        return new ListData<>(data.getContent(), pagination);
-    }
-
-    /**
      * 노출 상태인 게시판 목록
      *
      * @param search
@@ -238,7 +162,6 @@ public class BoardConfigInfoService {
      */
     public List<Board> getList() {
         QBoard board = QBoard.board;
-
         List<Board> items = (List<Board>)boardRepository.findAll(board.active.eq(true), Sort.by(desc("listOrder"), desc("createdAt")));
 
         return items;
