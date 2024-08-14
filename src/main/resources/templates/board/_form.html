@@ -1,23 +1,24 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="form" th:object="${requestBoardConfig}">
     <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
     <input type="hidden" name="gid" th:field="*{gid}">
 
     <h2>기본 설정</h2>
     <table class="table_cols mb30">
         <tr>
-            <th>사용여부</th>
+            <th width="180">사용여부</th>
             <td>
-                <input type="radio" name="active" id="active_true" th:field="*{active}" value="true">
+                <input type="radio" name="active" value="true" id="active_true" th:field="*{active}">
                 <label for="active_true">사용</label>
-                <input type="radio" name="active" id="active_false" th:field="*{active}" value="false">
-                <label for="active_true">미사용</label>
+
+                <input type="radio" name="active" value="false" id="active_false" th:field="*{active}">
+                <label for="active_false">미사용</label>
             </td>
         </tr>
         <tr>
-            <th width="180">게시판 아이디</th>
+            <th>게시판 ID</th>
             <td th:if="*{mode != 'edit'}">
                 <input type="text" name="bid" th:field="*{bid}">
 
@@ -29,10 +30,10 @@
             </td>
         </tr>
         <tr>
-        <tr>
             <th>게시판 이름</th>
             <td>
                 <input type="text" name="bName" th:field="*{bName}">
+
                 <div class="error" th:each="err : ${#fields.errors('bName')}" th:text="${err}"></div>
             </td>
         </tr>
@@ -42,32 +43,26 @@
                 <input type="number" name="listOrder" th:field="*{listOrder}">
             </td>
         </tr>
-    </table>
-    <h2>페이징 설정</h2>
-    <table class="table_cols mb30">
         <tr>
-            <th width="180">페이지 당 게시글 수</th>
+            <th>1페이지 게시글 수</th>
             <td>
-                <input type="number" min="1" max="40" step="1" placeholder="" name="rowsPerPage" th:field="*{rowsPerPage}" />
+                <input type="number" name="rowsPerPage" min="1" th:field="*{rowsPerPage}">
             </td>
         </tr>
         <tr>
-            <th>PC버전 페이지 구간 갯수</th>
+            <th>페이지 구간 갯수(PC)</th>
             <td>
-                <input type="number" min="1" max="40" step="1" placeholder="" name="pageCountPc" th:field="*{pageCountPc}" />
+                <input type="number" name="pageCountPc" min="1" th:field="*{pageCountPc}">
             </td>
         </tr>
         <tr>
-            <th>Mobile버전 페이지 구간 갯수 </th>
+            <th>페이지 구간 갯수(Mo)</th>
             <td>
-                <input type="number" min="1" max="40" step="1" placeholder="" name="pageCountMobile" th:field="*{pageCountMobile}" />
+                <input type="number" name="pageCountMobile" min="1" th:field="*{pageCountMobile}">
             </td>
         </tr>
-    </table>
-    <h2>기능 사용 여부</h2>
-    <table class="table_cols mb30">
         <tr>
-            <th width="180">답글 설정</th>
+            <th>답글 사용</th>
             <td>
                 <input type="radio" name="useReply" value="true" id="useReply_true" th:field="*{useReply}">
                 <label for="useReply_true">사용</label>
@@ -77,7 +72,7 @@
             </td>
         </tr>
         <tr>
-            <th>댓글 설정</th>
+            <th>댓글 사용</th>
             <td>
                 <input type="radio" name="useComment" value="true" id="useComment_true" th:field="*{useComment}">
                 <label for="useComment_true">사용</label>
@@ -86,8 +81,9 @@
                 <label for="useComment_false">미사용</label>
             </td>
         </tr>
+
         <tr>
-            <th>에디터 설정</th>
+            <th>에디터</th>
             <td>
                 <input type="radio" name="useEditor" value="true" id="useEditor_true" th:field="*{useEditor}">
                 <label for="useEditor_true">사용</label>
@@ -96,8 +92,9 @@
                 <label for="useEditor_false">미사용</label>
             </td>
         </tr>
+
         <tr>
-            <th>이미치 첨부 설정</th>
+            <th>이미지 첨부</th>
             <td>
                 <input type="radio" name="useUploadImage" value="true" id="useUploadImage_true" th:field="*{useUploadImage}">
                 <label for="useUploadImage_true">사용</label>
@@ -106,8 +103,9 @@
                 <label for="useUploadImage_false">미사용</label>
             </td>
         </tr>
+
         <tr>
-            <th>파일 첨부 설정</th>
+            <th>파일 첨부</th>
             <td>
                 <input type="radio" name="useUploadFile" value="true" id="useUploadFile_true" th:field="*{useUploadFile}">
                 <label for="useUploadFile_true">사용</label>
@@ -116,9 +114,7 @@
                 <label for="useUploadFile_false">미사용</label>
             </td>
         </tr>
-    </table>
-    <h2>부가 기능 설정</h2>
-    <table class="table_cols mb30">
+
         <tr>
             <th>글작성 후 이동</th>
             <td>
@@ -129,6 +125,7 @@
                 <label for="locationAfterWriting_view">글보기</label>
             </td>
         </tr>
+
         <tr>
             <th>글보기 하단 목록 노출</th>
             <td>
@@ -139,6 +136,7 @@
                 <label for="showListBelowView_false">미노출</label>
             </td>
         </tr>
+
         <tr>
             <th>스킨</th>
             <td>
@@ -159,6 +157,7 @@
             </td>
         </tr>
     </table>
+
     <h2>게시판 분류</h2>
     <table class="table_cols mb30">
         <tr>
@@ -168,6 +167,7 @@
             </td>
         </tr>
     </table>
+
     <h2>권한 설정</h2>
     <table class="table_cols mb30">
         <tr>
@@ -236,6 +236,7 @@
             </td>
         </tr>
     </table>
+
     <h2>게시판 상단</h2>
     <table class="table_cols mb30">
         <tr>
@@ -244,7 +245,7 @@
                 <textarea id="html_top" name="htmlTop" th:field="*{htmlTop}"></textarea>
 
                 <button type="button" class="upload_files sbtn"
-                        data-location="html_top" data-image-only="true"
+                    data-location="html_top" data-image-only="true"
                 >
                     <i class="xi-image"></i>
                     이미지 추가
@@ -257,6 +258,7 @@
             </td>
         </tr>
     </table>
+
     <h2>게시판 하단</h2>
     <table class="table_cols">
         <tr>
@@ -265,7 +267,8 @@
                 <textarea id="html_bottom" name="htmlBottom" th:field="*{htmlBottom}"></textarea>
 
                 <button type="button" class="upload_files sbtn"
-                        data-location="html_bottom" data-image-only="true">
+                        data-location="html_bottom" data-image-only="true"
+                >
                     <i class="xi-image"></i>
                     이미지 추가
                 </button>
@@ -277,7 +280,7 @@
             </td>
         </tr>
     </table>
+
     <script th:replace="~{common/_file_tpl::editor_tpl}"></script>
 </th:block>
 </html>
-
