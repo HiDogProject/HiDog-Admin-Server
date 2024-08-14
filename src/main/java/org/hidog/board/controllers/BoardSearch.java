@@ -1,20 +1,22 @@
 package org.hidog.board.controllers;
 
 import lombok.Data;
+import org.hidog.global.CommonSearch;
 
 import java.util.List;
 
 @Data
-public class BoardSearch {
-    private int page = 1;
-    private int limit = 20;
-
-    private String bid;
+public class BoardSearch extends CommonSearch{
+    /**
+     * sopt 검색옵션
+     * ALL - (통합검색) - bid, bName
+     * bid - 게시판아이디 검색
+     * bName - 게시판이름 검색
+     */
+    private String bid; //게시판 id
     private List<String> bids;
 
-    private String bName;
-    private boolean active;
+    private String bName; //게시판 이름
+    private boolean active; //사용 미사용
 
-    private String sopt; // 검색 옵션 
-    private String skey; // 검색 키워드
-}   
+}

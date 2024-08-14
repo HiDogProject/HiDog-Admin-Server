@@ -33,22 +33,22 @@ public class BoardConfigInfoService {
     private final FileInfoService fileInfoService;
     private final HttpServletRequest request;
 
-    /**
-     * 게시판 설정 조회
-     *
-     * @param bid
-     * @return
-     */
-    public Board get(String bid) {
+    //게시판 bid로 찾기
+    public Board get(String bid){
         Board board = boardRepository.findById(bid).orElseThrow(BoardNotFoundException::new);
 
         addBoardInfo(board);
+
+        //추가 데이터 처리
 
         return board;
 
     }
 
-    public RequestBoardConfig getForm(String bid) {
+
+    //게시판 설정 정보 불러오기
+    public RequestBoardConfig getForm(String bid){
+  
         Board board = get(bid);
 
         RequestBoardConfig form = new ModelMapper().map(board, RequestBoardConfig.class);
@@ -61,6 +61,79 @@ public class BoardConfigInfoService {
         form.setMode("edit");
 
         return form;
+    }
+
+    public List<Board> getList(){
+        QBoard board = QBoard.board;
+        List<Board> items = (List<Board>)boardRepository.findAll(board.active.eq(true), Sort.by(desc("listOrder"), desc("createdAt")));
+
+        return items;
+    }
+
+    public ListData<Board> getList(BoardSearch search, boolean isAll){
+        int page = Math.max(search.getPage(), 1);
+        int limit = search.getLimit();
+        limit = limit < 1 ? 20 : limit;
+
+        QBoard board = QBoard.board;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+
+        /* 검색처리 S */
+        String sopt = search.getSopt();
+        String skey = search.getSkey();
+        String bid = search.getBid();
+        String bName = search.getBName();
+        List<String> bids = search.getBids();
+
+        sopt = StringUtils.hasText(sopt) ? sopt : "ALL"; //통합검색이 기본
+
+        //키워드가 존재 할 때, 조건별 검색
+        if(StringUtils.hasText(skey) && StringUtils.hasText(skey.trim())){
+            /**
+             * sopt 검색옵션
+             * ALL - (통합검색) - bid, bName
+             * bid - 게시판아이디 검색
+             * bName - 게시판이름 검색
+             */
+            sopt = sopt.trim();
+            skey = skey.trim();
+            BooleanExpression condition = null;
+
+            if(sopt.equals("ALL")){ //통합검색
+                condition = board.bid.concat(board.bName).contains(skey);
+
+            }else if(sopt.equals("bid")){ //게시판 아이디 검색
+                //skey = skey.replaceAll("\\D", ""); //숫자만 남기고 검색하기
+                condition = board.bid.contains(skey);
+
+            }else if(sopt.equals("bName")){ //게시판 이름 검색
+                condition = board.bName.contains(skey);
+
+            }
+
+            if(condition != null) andBuilder.and(condition);
+        }
+
+        if (StringUtils.hasText(bid)) { // 게시판 ID
+            andBuilder.and(board.bid.contains(bid.trim()));
+
+            if(bName != null && StringUtils.hasText(bName.trim())){//게시판 이름
+                andBuilder.and(board.bName.eq(bName.trim()));
+            }
+        }
+        /* 검색처리 E */
+
+        //페이징 및 정렬 처리
+        Pageable pageable = PageRequest.of(page-1, limit, Sort.by(desc("createdAt")));
+
+        //데이터 조회
+        Page<Board> data = boardRepository.findAll(andBuilder, pageable);
+
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
+
+        List<Board> items = data.getContent();
+
+        return new ListData<>(items, pagination);
     }
 
     /**

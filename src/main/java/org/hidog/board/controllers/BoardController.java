@@ -31,6 +31,14 @@ public class BoardController implements ExceptionProcessor {
     private final BoardConfigInfoService configInfoService;
     private final BoardConfigDeleteService configDeleteService;
 
+    private final BoardConfigValidator validator;
+
+    @ModelAttribute
+    public RequestBoardConfig requestBoardConfig() {
+        return new RequestBoardConfig();
+    }
+
+
     private final BoardConfigValidator configValidator;
     private final Utils utils;
 
@@ -44,9 +52,10 @@ public class BoardController implements ExceptionProcessor {
         return Menu.getMenus("board");
     }
 
+
     /**
-     * 게시판 목록
-     *
+     * 게시판 목록 페이지
+     * @param model
      * @return
      */
     @GetMapping
@@ -65,34 +74,34 @@ public class BoardController implements ExceptionProcessor {
     }
 
     /**
-     * 게시판 목록 - 수정
-     *
-     * @param chks
+
+     * 게시판 다중 수정
      * @return
      */
     @PatchMapping
-    public String editList(@RequestParam("chk") List<Integer> chks, Model model) {
+    public String editList(@RequestParam List<Integer> chks, Model model) {
         commonProcess("list", model);
-
         configSaveService.saveList(chks);
-
         model.addAttribute("script", "parent.location.reload()");
         return "common/_execute_script";
     }
 
+
+    /**
+     * 게시판 다중 삭제
+     * @return
+     */
     @DeleteMapping
-    public String deleteList(@RequestParam("chk") List<Integer> chks, Model model) {
+    public String deleteList(@RequestParam List<Integer> chks, Model model){
         commonProcess("list", model);
-
         configDeleteService.deleteList(chks);
-
-        model.addAttribute("script", "parent.location.reload();");
         return "common/_execute_script";
     }
 
     /**
-     * 게시판 등록
-     *
+     * 게시판 등록 페이지
+     * @param form
+     * @param model
      * @return
      */
     @GetMapping("/add")
@@ -102,6 +111,13 @@ public class BoardController implements ExceptionProcessor {
         return "board/add";
     }
 
+
+    /**
+     * 게시판 수정 페이지
+     * @param bid
+     * @param model
+     * @return
+     */
     @GetMapping("/edit/{bid}")
     public String edit(@PathVariable("bid") String bid, Model model) {
         commonProcess("edit", model);
@@ -113,8 +129,10 @@ public class BoardController implements ExceptionProcessor {
     }
 
     /**
-     * 게시판 등록/수정 처리
-     *
+     * 게시글 등록 or 수정 처리
+     * @param config
+     * @param model
+     * @param errors
      * @return
      */
     @PostMapping("/save")
@@ -137,7 +155,7 @@ public class BoardController implements ExceptionProcessor {
 
     /**
      * 게시글 관리
-     *
+     * @param model
      * @return
      */
     @GetMapping("/posts")

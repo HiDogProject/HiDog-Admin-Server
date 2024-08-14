@@ -17,35 +17,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardConfigDeleteService {
 
-    private final BoardRepository boardRepository;
-    private final BoardConfigInfoService configInfoService;
+    private final BoardConfigInfoService infoService;
     private final FileDeleteService fileDeleteService;
+    private final BoardRepository boardRepository;
     private final Utils utils;
 
-    /**
-     * 게시판 삭제
-     * 
-     * @param bid : 게시판 아이디
-     */
     public void delete(String bid) {
-        Board board = configInfoService.get(bid);
-
+        Board board = infoService.get(bid);
         String gid = board.getGid();
 
-        boardRepository.delete(board);
-
+        boardRepository.delete(board); //게시판삭제
         boardRepository.flush();
-
-        fileDeleteService.delete(gid);
+        fileDeleteService.delete(gid); //게시판 관련 파일삭제
     }
 
     public void deleteList(List<Integer> chks) {
-        if (chks == null || chks.isEmpty()) {
+        if(chks == null || chks.isEmpty()) {
             throw new AlertException("삭제할 게시판을 선택하세요.", HttpStatus.BAD_REQUEST);
         }
 
-        for (int chk : chks) {
+        for(int chk : chks){
             String bid = utils.getParam("bid_" + chk);
+            Board board = boardRepository.findById(bid).orElse(null);
+            if(board == null) continue;
             delete(bid);
         }
     }

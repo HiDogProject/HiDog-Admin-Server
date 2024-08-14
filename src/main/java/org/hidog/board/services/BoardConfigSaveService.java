@@ -7,7 +7,7 @@ import org.hidog.board.repositories.BoardRepository;
 import org.hidog.file.services.FileUploadDoneService;
 import org.hidog.global.Utils;
 import org.hidog.global.exceptions.script.AlertException;
-import org.hidog.member.constants.Authority;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,9 +29,7 @@ public class BoardConfigSaveService {
 
         Board board = boardRepository.findById(bid).orElseGet(Board::new);
 
-        if (mode.equals("add")) { // 게시판 등록시 gid, bid 등록 -> 수정시에는 변경 X
-            board.setBid(bid);
-            board.setGid(form.getGid());
+        if(mode.equals("add")){ //게시판 등록시 gid, bid 등록 -> 수정시에는 변경 X
         }
 
         board.setBName(form.getBName());
@@ -66,21 +64,22 @@ public class BoardConfigSaveService {
         fileUploadDoneService.process(board.getGid());
     }
 
-    public void saveList(List<Integer> chks) {
-        if (chks == null || chks.isEmpty()) {
+    //게시글 다중 수정
+    public void saveList(List<Integer> chks){
+        if(chks == chks || chks.isEmpty()){
             throw new AlertException("수정할 게시판을 선택하세요.", HttpStatus.BAD_REQUEST);
         }
 
-        for (int chk : chks) {
+        for (int chk : chks){
             String bid = utils.getParam("bid_" + chk);
             Board board = boardRepository.findById(bid).orElse(null);
-            if (board == null) continue;
+            if(board == null) continue;
 
-            boolean active = Boolean.parseBoolean(utils.getParam("active_" + chk));
-            board.setActive(active);
+            boolean active = Boolean.parseBoolean(utils.getParam("active_" + chk)); //사용자가 입력한 사용여부
+            board.setActive(active); //사용여부 변경
 
-            int listOrder = Integer.parseInt(utils.getParam("listOrder_" + chk));
-            board.setListOrder(listOrder);
+            int listOrder = Integer.parseInt(utils.getParam("listOrder_" + chk)); //사용자가 입력한 진열가중치
+            board.setListOrder(listOrder); //진열가중치 변경
         }
 
         boardRepository.flush();
