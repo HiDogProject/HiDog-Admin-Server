@@ -100,7 +100,7 @@ public class BoardController implements ExceptionProcessor {
 
     /**
      * 게시판 등록 페이지
-     * @param form
+     * @param config
      * @param model
      * @return
      */

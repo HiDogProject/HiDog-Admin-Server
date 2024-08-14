@@ -7,7 +7,7 @@ import org.hidog.board.repositories.BoardRepository;
 import org.hidog.file.services.FileUploadDoneService;
 import org.hidog.global.Utils;
 import org.hidog.global.exceptions.script.AlertException;
-import org.modelmapper.ModelMapper;
+import org.hidog.member.constants.Authority;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +30,8 @@ public class BoardConfigSaveService {
         Board board = boardRepository.findById(bid).orElseGet(Board::new);
 
         if(mode.equals("add")){ //게시판 등록시 gid, bid 등록 -> 수정시에는 변경 X
+            board.setBid(bid);
+            board.setGid(form.getGid());
         }
 
         board.setBName(form.getBName());
