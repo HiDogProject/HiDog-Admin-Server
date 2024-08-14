@@ -5,6 +5,59 @@
 
 <section layout:fragment="content">
     <div th:replace="~{common/_message::message}"></div>
-    <h1>게시판목록</h1>
+    <h1>게시판 목록</h1>
+    <h2>게시판 조회</h2>
+    <form name="frmSearch" method="get" th:value="${@utils.redirectUrl('/board')}" autocomplete="off" th:object="${boardSearch}">
+        <table class="table_cols mb30">
+            <tr>
+                <th>키워드</th>
+                <td>
+                    <div class="input_grp">
+                        <select name="sopt" th:field="*{sopt}">
+                            <option value="ALL">통합검색</option>
+                            <option value="bid">게시판 ID</option>
+                            <option value="bName">게시판명</option>
+                        </select>
+                        <input type="text" name="skey" th:field="*{skey}">
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="search_btn">
+            <button type="submit" class="btn">검색하기</button>
+        </div>
+    </form>
+
+    <h2>게시판 목록</h2>
+    <form name="frmList" method="post" th:action="${@utils.redirectUrl('/board')}" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="_method" value="PATCH">
+
+        <table class="table_rows">
+            <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" class="checkall" data-target-name="chk" id="checkall">
+                    <label for="checkall"></label>
+                </th>
+                <th width="150">게시판 ID</th>
+                <th width="250">게시판 이름</th>
+                <th width="250">사용여부</th>
+                <th width="120">진열가중치</th>
+                <th></th>
+            </thead>
+            <tbody>
+            <tr th:if="${items == null || items.isEmpty()}">
+                <td colspan="6" class="no_data">조회된 게시판이 없습니다.</td>
+            </tr>
+            <tr th:unless="${items == null || items.isEmpty()}" th:each="item, status : ${items}" th:object="${item}">
+                <td align="center">
+                    <input type="hidden" th:name="${'bid_' + status.index}" th:value="*{bid}">
+                    <input type="checkbox" name="chk" th:value="*{status.index}" th:id="${'chk_' + status.index}">
+                    <label th:For="${'chk_' + status.index}"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 </section>
 </html>

@@ -68,7 +68,7 @@ public class BoardConfigInfoService {
         return items;
     }
 
-    public ListData<Board> getList(BoardSearch search){
+    public ListData<Board> getList(BoardSearch search, boolean isAll){
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
         limit = limit < 1 ? 20 : limit;

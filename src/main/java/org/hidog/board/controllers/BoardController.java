@@ -7,6 +7,8 @@ import org.hidog.board.services.BoardConfigDeleteService;
 import org.hidog.board.services.BoardConfigInfoService;
 import org.hidog.board.services.BoardConfigSaveService;
 import org.hidog.board.validators.BoardConfigValidator;
+import org.hidog.global.ListData;
+import org.hidog.global.Pagination;
 import org.hidog.global.Utils;
 import org.hidog.global.exceptions.ExceptionProcessor;
 import org.hidog.menus.Menu;
@@ -55,9 +57,15 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping
-    public String list(Model model) {
+    public String list(@ModelAttribute BoardSearch search, Model model) {
         commonProcess("list", model);
-        List<Board> items = configInfoService.getList();
+        ListData<Board> data = configInfoService.getList(search, true);
+
+        List<Board> items = data.getItems();
+        Pagination pagination = data.getPagination();
+
+        model.addAttribute("items", items);
+        model.addAttribute("pagination", pagination);
 
         return "board/list";
     }
