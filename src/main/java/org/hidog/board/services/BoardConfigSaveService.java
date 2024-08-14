@@ -42,6 +42,7 @@ public class BoardConfigSaveService {
         fileUploadDoneService.process(board.getGid());
     }
 
+    //게시글 다중 수정
     public void saveList(List<Integer> chks){
         if(chks == chks || chks.isEmpty()){
             throw new AlertException("수정할 게시판을 선택하세요.", HttpStatus.BAD_REQUEST);
