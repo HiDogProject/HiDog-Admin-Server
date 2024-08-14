@@ -62,16 +62,19 @@ public class BoardController implements ExceptionProcessor {
     }
 
     /**
-     * 게시판 수정
+     * 게시판 다중 수정
      * @return
      */
     @PatchMapping
-    public String editList(){
-        return "board/edit";
+    public String editList(@RequestParam List<Integer> chk, Model model) {
+        commonProcess("list", model);
+        configSaveService.saveList(chk);
+        model.addAttribute("script", "parent.location.reload()");
+        return "common/_execute_script";
     }
 
     /**
-     * 게시판 삭제
+     * 게시판 다중 삭제
      * @return
      */
     @DeleteMapping
