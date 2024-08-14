@@ -2,6 +2,7 @@ package org.hidog.board.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hidog.board.entities.Board;
 import org.hidog.board.services.BoardConfigInfoService;
 import org.hidog.board.services.BoardConfigSaveService;
 import org.hidog.board.validators.BoardConfigValidator;
@@ -28,6 +29,7 @@ public class BoardController implements ExceptionProcessor {
     private final BoardConfigSaveService configSaveService;
     private final BoardConfigInfoService configInfoService;
     private final BoardConfigValidator validator;
+    private final BoardConfigInfoService boardConfigInfoService;
 
     @ModelAttribute
     public RequestBoardConfig requestBoardConfig() {
@@ -48,7 +50,10 @@ public class BoardController implements ExceptionProcessor {
 
     //게시판 목록 페이지
     @GetMapping
-    public String list() {
+    public String list(Model model) {
+        commonProcess("list", model);
+        List<Board> items = boardConfigInfoService.getList();
+
         return "board/list";
     }
 

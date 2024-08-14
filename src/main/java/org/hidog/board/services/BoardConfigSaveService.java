@@ -27,7 +27,6 @@ public class BoardConfigSaveService {
         Board board = boardRepository.findById(bid).orElseGet(Board::new);
 
         if(mode.equals("add")){ //게시판 등록시 gid, bid 등록 -> 수정시에는 변경 X
-
         }
 
         board = new ModelMapper().map(form, Board.class);
