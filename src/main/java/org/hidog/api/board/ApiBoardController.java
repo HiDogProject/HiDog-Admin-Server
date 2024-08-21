@@ -23,6 +23,7 @@ public class ApiBoardController implements RestExceptionProcessor {
      * @param bid
      * @return
      */
+
     @GetMapping("/config/{bid}")
     public JSONData getBoard(@PathVariable("bid") String bid) {
         Board board = infoService.get(bid);

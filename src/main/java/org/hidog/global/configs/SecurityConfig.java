@@ -44,15 +44,17 @@ public class SecurityConfig {
         /* 로그인, 로그아웃 E */
         /* 인가(접근 통제) 설정 S*/
         http.authorizeRequests(authorizeRequests -> {
+            // 관리자는 ADMIN 권한이 있어야 /admin/** 경로에 접근 가능
             authorizeRequests
+                    .requestMatchers("/admin/**").hasAuthority("ADMIN")
                     .requestMatchers("/member/**", "/api/board/config/**").permitAll()
                     .anyRequest().permitAll();
-                    //.anyRequest().hasAnyAuthority("ADMIN");
+            //.anyRequest().hasAnyAuthority("ADMIN");
         });
         http.exceptionHandling(c -> {
-            c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//예외 가
+            c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//인증 실패시 처리
                     .accessDeniedHandler((req, res, e) -> {
-                        res.sendError(HttpStatus.UNAUTHORIZED.value());
+                        res.sendError(HttpStatus.FORBIDDEN.value());
                     });
         });
         /* 인가(접근 통제) 설정 E*/
