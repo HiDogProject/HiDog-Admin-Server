@@ -62,8 +62,9 @@ public class SecurityConfig {
         });
         http.exceptionHandling(c -> {
             c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//예외
+
                     .accessDeniedHandler((req, res, e) -> {
-                        res.sendError(HttpStatus.UNAUTHORIZED.value());
+                        res.sendError(HttpStatus.FORBIDDEN.value());
                     });
         });
         /* 인가(접근 통제) 설정 E*/

@@ -100,6 +100,9 @@ public class Pagination {
         this(page, total, ranges, limit, null);
     }
 
+    public Pagination(long i, int size, long totalElements) {
+    }
+
     public List<String[]> getPages() {
         // 0 : 페이지 번호, 1 : 페이지 URL - ?page=페이지번호
 
