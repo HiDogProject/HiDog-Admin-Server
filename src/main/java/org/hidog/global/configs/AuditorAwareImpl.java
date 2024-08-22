@@ -1,7 +1,6 @@
 package org.hidog.global.configs;
 
 import lombok.RequiredArgsConstructor;
-
 import org.hidog.member.MemberUtil;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;

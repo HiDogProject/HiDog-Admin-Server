@@ -3,6 +3,7 @@ package org.hidog.config.controllers;
 import lombok.RequiredArgsConstructor;
 import org.hidog.config.services.ConfigInfoService;
 import org.hidog.config.services.ConfigSaveService;
+import org.hidog.global.Utils;
 import org.hidog.global.exceptions.ExceptionProcessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ public class BasicConfigController implements ExceptionProcessor, CommonConfig {
 
     private final ConfigSaveService saveService;
     private final ConfigInfoService infoService;
+    private final Utils utils;
 
     @ModelAttribute("subMenuCode")
     public String getSubMenuCode() {
@@ -47,6 +49,6 @@ public class BasicConfigController implements ExceptionProcessor, CommonConfig {
 
         model.addAttribute("message", "저장되었습니다.");
 
-        return "config/basic";
+        return utils.redirectUrl("config/basic");
     }
 }
