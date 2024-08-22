@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
@@ -38,9 +40,9 @@ public class ApiBoardController implements RestExceptionProcessor {
      */
     @GetMapping
     public JSONData getBoardList() {
-        Board board = infoService.getBoardList();
+        List<String[]> data = infoService.getBoardList();
 
-        return new JSONData(board);
+        return new JSONData(data);
     }
 
 }
