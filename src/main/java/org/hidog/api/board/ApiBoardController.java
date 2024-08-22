@@ -30,4 +30,16 @@ public class ApiBoardController implements RestExceptionProcessor {
         return new JSONData(board);
     }
 
+    /**
+     * 게시판 리스트
+     *
+     * @return
+     */
+    @GetMapping
+    public JSONData getBoardList() {
+        Board board = infoService.getBoardList();
+
+        return new JSONData(board);
+    }
+
 }

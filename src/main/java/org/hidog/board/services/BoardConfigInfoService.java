@@ -42,7 +42,11 @@ public class BoardConfigInfoService {
         //추가 데이터 처리
 
         return board;
+    }
 
+    //게시판 리스트 출력
+    public Board getBoardList(){
+        return boardRepository.findAll().stream().findFirst().get();
     }
 
 
