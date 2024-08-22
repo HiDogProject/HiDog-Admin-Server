@@ -3,11 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/main}">
 
-    <section layout:fragment="content">
+<section layout:fragment="content">
     <div th:replace="~{common/_message::message}"></div>
 
-    <form th:action="@{/member/search}" method="get">
-        <table class="member_table">
+    <form th:action="@{/member/authority}" method="get">
+        <table class="table_cols mb30">
             <tr>
                 <th>키워드</th>
                 <td>
@@ -25,31 +25,33 @@
         </table>
     </form>
 
-    <table>
+    <table class="table_cols mb30">
         <thead>
         <tr>
+            <th>ID</th>
             <th>회원번호</th>
-            <th>이메일</th>
             <th>닉네임</th>
             <th>회원등급</th>
-            <th>삭제</th>
+            <th>권한 수정</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="member : ${items}">
+            <td th:text="${member.id}"></td>
             <td th:text="${member.seq}"></td>
-            <td th:text="${member.email}"></td>
             <td th:text="${member.userName}"></td>
-            <td th:text="${member.authority}"></td>
             <td>
-                <form th:action="@{/member/delete}" method="post">
+                <form th:action="@{/member/update-authority}" method="post">
                     <input type="hidden" name="memberId" th:value="${member.id}" />
-                    <button type="submit">삭제</button>
+                    <select name="authority" th:field="*{authority}">
+                        <option th:value="${T(org.hidog.member.constants.Authority).USER}" th:text="${T(org.hidog.member.constants.Authority).USER}">회원</option>
+                        <option th:value="${T(org.hidog.member.constants.Authority).ADMIN}" th:text="${T(org.hidog.member.constants.Authority).ADMIN}">관리자</option>
+                    </select>
+                    <button type="submit">수정</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-        <th:block th:replace="~{common/_pagination::pagination}"></th:block>
-    </section>
+</section>
 </html>

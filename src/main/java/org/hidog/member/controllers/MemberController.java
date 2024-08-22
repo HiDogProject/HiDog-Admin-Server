@@ -1,118 +1,88 @@
 package org.hidog.member.controllers;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.hidog.global.Utils;
+import org.hidog.global.ListData;
+import org.hidog.global.Pagination;
 import org.hidog.global.exceptions.ExceptionProcessor;
+import org.hidog.member.constants.Authority;
+import org.hidog.member.entities.Member;
+import org.hidog.member.services.MemberDeleteService;
+import org.hidog.member.services.MemberInfoService;
 import org.hidog.member.services.MemberSaveService;
-import org.hidog.member.services.MemberService;
-import org.hidog.member.validators.JoinValidator;
-import org.springframework.http.ResponseEntity;
+import org.hidog.menus.Menu;
+import org.hidog.menus.MenuDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 
-@Slf4j
+
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes("requestLogin")
 public class MemberController implements ExceptionProcessor {
 
-    private final JoinValidator joinValidator;
-    private final MemberSaveService memberSaveService;
-    private final MemberService memberService;
-    private final Utils utils;
+    private final MemberInfoService memberInfoService;
 
-
-    @ModelAttribute
-    public RequestLogin requestLogin() {
-        return new RequestLogin();
+    @ModelAttribute("menuCode")
+    public String getMenuCode() {
+        return "member";
     }
 
-    @GetMapping("/join")
-    public String join(@ModelAttribute RequestJoin form, Model model) {
-        commonProcess("join", model);
-
-        model.addAttribute("EmailAuthVerified", false);
-        return utils.frontUrl("member/join");
+    @ModelAttribute("subMenus")
+    public List<MenuDetail> getSubMenus() {
+        return Menu.getMenus("member");
     }
-
-    @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
-        commonProcess("join", model);
-
-        joinValidator.validate(form, errors);
-
-        if (errors.hasErrors()) {
-            model.addAttribute(form);
-            return utils.frontUrl("member/join");
-        }
-
-        memberSaveService.save(form);
-
-        return "redirect:" + utils.redirectUrl("/member/login");
-    }
-
-    @GetMapping("/join/check-username")
-    public ResponseEntity<Boolean> checkUserName(@RequestParam("userName") String userName) {
-        boolean exists = memberService.existsByUserName(userName);
-        return ResponseEntity.ok(exists); // exists가 true이면 중복, false이면 사용 가능
-    }
-
-    @GetMapping("/login")
-    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
-        commonProcess("login", model);
-
-        String code = form.getCode();
-        if (StringUtils.hasText(code)) {
-            errors.reject(code, form.getDefaultMessage());
-            //비번이 만료인 경우 비번 재설정 페이지 이동
-            if (code.equals("CredentialsExpired.Login")) {
-                return "redirect:" + utils.redirectUrl("/member/password/reset");
-            }
-        }
-        return utils.frontUrl("member/login");
-    }
-
-
 
     /**
-     * 회원 관련 컨트롤러 공통 처리
+     * 회원 목록 페이지
+     * @param model
+     * @return
+     */
+    @GetMapping
+    public String list(@ModelAttribute MemberSearch search, Model model) {
+        commonProcess("list", model);
+
+        ListData<Member> data = memberInfoService.getList(search, true);
+
+        List<Member> items = data.getItems();
+        Pagination pagination = data.getPagination();
+
+        model.addAttribute("items", items);
+        model.addAttribute("pagination", pagination);
+
+        return "member/list";
+    }
+
+    /**
+     * 공통 처리
      *
      * @param mode
      * @param model
      */
     private void commonProcess(String mode, Model model) {
-        mode = Objects.requireNonNullElse(mode, "join");
+        String pageTitle = "회원 목록";
+        mode = StringUtils.hasText(mode) ? mode : "list";
 
-        List<String> addCss = new ArrayList<>();
-        List<String> addCommonScript = new ArrayList<>();
-        List<String> addScript = new ArrayList<>();
-
-        addCss.add("member/style");  // 회원 공통 스타일
-        if (mode.equals("join")) {
-            addCommonScript.add("fileManager");
-            addCss.add("member/join");
-            addScript.add("member/join");
-            addScript.add("member/joinAddress");
-            addScript.add("member/joinNickName");
-
-        } else if (mode.equals("login")) {
-            addCss.add("member/login");
+        if (mode.equals("authority")) {
+            pageTitle = "회원 권한 수정";
+        } else if (mode.equals("list")) {
+            pageTitle = "회원 목록";
         }
 
-        model.addAttribute("addCss", addCss);
-        model.addAttribute("addCommonScript", addCommonScript);
+        List<String> addScript = new ArrayList<>();
+
+        if (mode.equals("authority")) { // 회원 권한 수정
+            addScript.add("member/authority");
+        }
+
+        model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("subMenuCode", mode);
         model.addAttribute("addScript", addScript);
     }
 }

@@ -26,6 +26,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<Authorities, QAuthorities> authorities = this.<Authorities, QAuthorities>createList("authorities", Authorities.class, QAuthorities.class, PathInits.DIRECT2);
 
+    public final EnumPath<org.hidog.member.constants.Authority> authority = createEnum("authority", org.hidog.member.constants.Authority.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
