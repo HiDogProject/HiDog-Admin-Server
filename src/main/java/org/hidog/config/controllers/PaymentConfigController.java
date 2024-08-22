@@ -3,6 +3,7 @@ package org.hidog.config.controllers;
 import lombok.RequiredArgsConstructor;
 import org.hidog.config.services.ConfigInfoService;
 import org.hidog.config.services.ConfigSaveService;
+import org.hidog.global.Utils;
 import org.hidog.global.exceptions.ExceptionProcessor;
 import org.hidog.order.constants.PayMethod;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ public class PaymentConfigController implements ExceptionProcessor, CommonConfig
 
     private final ConfigSaveService saveService;
     private final ConfigInfoService infoService;
+    private final Utils utils;
 
     @ModelAttribute("subMenuCode")
     public String subMenuCode(){
@@ -45,7 +47,7 @@ public class PaymentConfigController implements ExceptionProcessor, CommonConfig
         saveService.save(subMenuCode(), form);
         model.addAttribute("message", "저장되었습니다.");
 
-        return "config/payment";
+        return "redirect:" + utils.redirectUrl("/config/payment");
     }
 
 

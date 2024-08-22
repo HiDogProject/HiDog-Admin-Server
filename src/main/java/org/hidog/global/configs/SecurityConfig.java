@@ -1,7 +1,9 @@
 package org.hidog.global.configs;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.hidog.global.Utils;
 import org.hidog.member.services.LoginFailureHandler;
 import org.hidog.member.services.LoginSuccessHandler;
 import org.hidog.member.services.MemberAuthenticationEntryPoint;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,37 +25,46 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final MemberInfoService memberInfoService;
+    private final Utils utils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        LoginSuccessHandler loginSuccessHandler = new LoginSuccessHandler();
+        LoginFailureHandler loginFailureHandler = new LoginFailureHandler();
+        loginSuccessHandler.setUtils(utils);
+        loginFailureHandler.setUtils(utils);
+
         /* 로그인, 로그아웃 S */
         http.formLogin(f -> {
             f.loginPage("/member/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    .successHandler(new LoginSuccessHandler())
-                    .failureHandler(new LoginFailureHandler());
+                    .successHandler(loginSuccessHandler)
+                    .failureHandler(loginFailureHandler);
         });
 
         http.logout(logout -> {
-            logout
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                    .logoutSuccessUrl("/member/login");
+            logout.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                    .logoutSuccessHandler((req, res, e) -> {
+
+                        HttpSession session = req.getSession();
+                        session.removeAttribute("device");
+
+                        res.sendRedirect(req.getContextPath() + utils.redirectUrl("/member/login"));
+                    });
         });
         /* 로그인, 로그아웃 E */
         /* 인가(접근 통제) 설정 S*/
         http.authorizeRequests(authorizeRequests -> {
-            authorizeRequests
-                    .requestMatchers("/member/**", "/api/board/config/**").permitAll()
+            authorizeRequests.requestMatchers("/mypage/**").authenticated()//회원 전용
                     .anyRequest().permitAll();
-                    //.anyRequest().hasAnyAuthority("ADMIN");
         });
         http.exceptionHandling(c -> {
-            c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//예외 가
+            c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//예외
+
                     .accessDeniedHandler((req, res, e) -> {
-                        res.sendError(HttpStatus.UNAUTHORIZED.value());
+                        res.sendError(HttpStatus.FORBIDDEN.value());
                     });
         });
         /* 인가(접근 통제) 설정 E*/
@@ -64,7 +76,7 @@ public class SecurityConfig {
             c.rememberMeParameter("autoLogin")
                     .tokenValiditySeconds(60*60*24*15) // 15일간 유효
                     .userDetailsService(memberInfoService) //재로그인할 때 인증을 위해
-                    .authenticationSuccessHandler(new LoginSuccessHandler()); // 자동 로그인 성공-> handler가 처리
+                    .authenticationSuccessHandler(loginSuccessHandler); // 자동 로그인 성공-> handler가 처리
         });
         /*자동 로그인 설정 E*/
 
@@ -74,5 +86,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers("/payment/**");
     }
 }

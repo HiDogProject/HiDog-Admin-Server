@@ -17,6 +17,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private Utils utils;
 
+   // public void setUtils(Utils utils){
+   //     this.utils = utils;
+  //  }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         HttpSession session = request.getSession();
