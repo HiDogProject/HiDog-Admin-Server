@@ -62,17 +62,6 @@ public class MemberInfoService implements UserDetailsService {
                 .build();
     }
 
-    public Member get(String email){
-        Member member = memberRepository.findByEmail(email).orElseThrow(BoardNotFoundException::new);
-
-        addMemberInfo(member);
-
-        //추가 데이터 처리
-
-        return member;
-
-    }
-
     public ListData<Member> getList(MemberSearch search, boolean isAll) {
         int page = Math.max(search.getPage(), 1);
         int limit = search.getLimit();
