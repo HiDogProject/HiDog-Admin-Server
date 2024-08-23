@@ -22,6 +22,18 @@
                 </td>
             </tr>
             <tr>
+                <th>(iniApiKey)</th>
+                <td>
+                    <input type="text" name="iniApikey" th:field="*{iniApiKEy}">
+                </td>
+            </tr>
+            <tr>
+                <th>(iniApiIv)</th>
+                <td>
+                    <input type="text" name="iniApiIv" th:field="*{iniApiIv}">
+                </td>
+            </tr>
+            <tr>
                 <th>결제수단</th>
                 <td>
                     <th:block th:each="pay : ${payMethods}">
