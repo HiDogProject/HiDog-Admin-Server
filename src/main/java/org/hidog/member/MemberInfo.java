@@ -12,6 +12,7 @@ import java.util.Collection;
 @Data
 @Builder
 public class MemberInfo implements UserDetails, Serializable {
+
     private final long serialVersionUID = 1L;
     private String email;
     private String password;
