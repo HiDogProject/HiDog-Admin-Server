@@ -3,11 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/main}">
 
-    <section layout:fragment="content">
+<section layout:fragment="content">
     <div th:replace="~{common/_message::message}"></div>
-        <h1>회원 목록</h1>
-        <h2>회원 조회</h2>
-    <form th:action="${@utils.redirectUrl('/member')}" method="get" th:object="${memberSearch}">
+
+    <form th:action="@{/member/authority}" method="get">
         <table class="table_cols mb30">
             <tr>
                 <th>키워드</th>
@@ -19,37 +18,40 @@
                             <option value="userName">닉네임</option>
                         </select>
                         <input type="text" name="skey" th:field="*{skey}" placeholder="검색어 입력">
+                        <button type="submit">검색</button>
                     </div>
                 </td>
             </tr>
         </table>
-        <div class="search_btn">
-            <button type="submit" class="btn">검색하기</button>
-        </div>
     </form>
 
-    <table class="table_rows">
+    <table class="table_cols mb30">
         <thead>
         <tr>
+            <th>ID</th>
             <th>회원번호</th>
-            <th>이메일</th>
             <th>닉네임</th>
             <th>회원등급</th>
+            <th>권한 수정</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="member : ${items}">
+            <td th:text="${member.id}"></td>
             <td th:text="${member.seq}"></td>
-            <td th:text="${member.email}"></td>
             <td th:text="${member.userName}"></td>
             <td>
-                <ul>
-                    <li th:each="auth : ${member.authorities}" th:text="${auth.authority}"></li>
-                </ul>
+                <form th:action="@{/member/update-authority}" method="post">
+                    <input type="hidden" name="memberId" th:value="${member.id}" />
+                    <select name="authority" th:field="*{authority}">
+                        <option th:value="${T(org.hidog.member.constants.Authority).USER}" th:text="${T(org.hidog.member.constants.Authority).USER}">회원</option>
+                        <option th:value="${T(org.hidog.member.constants.Authority).ADMIN}" th:text="${T(org.hidog.member.constants.Authority).ADMIN}">관리자</option>
+                    </select>
+                    <button type="submit">수정</button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
-        <th:block th:replace="~{common/_pagination::pagination}"></th:block>
-    </section>
+</section>
 </html>
