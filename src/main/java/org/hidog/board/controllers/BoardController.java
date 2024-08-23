@@ -70,7 +70,7 @@ public class BoardController implements ExceptionProcessor {
         model.addAttribute("items", items);
         model.addAttribute("pagination", pagination);
 
-        return "/board/list";
+        return "board/list";
     }
 
     /**
@@ -109,7 +109,7 @@ public class BoardController implements ExceptionProcessor {
     @GetMapping("/add")
     public String add(@ModelAttribute RequestBoardConfig config, Model model) {
         commonProcess("add", model);
-        return "/board/add";
+        return "board/add";
     }
 
 
@@ -126,7 +126,7 @@ public class BoardController implements ExceptionProcessor {
         RequestBoardConfig form = configInfoService.getForm(bid);
         model.addAttribute("requestBoardConfig", form);
 
-        return "/board/edit";
+        return "board/edit";
     }
 
     /**
@@ -163,7 +163,7 @@ public class BoardController implements ExceptionProcessor {
     public String posts(Model model) {
         commonProcess("posts", model);
 
-        return "/board/posts";
+        return "board/posts";
     }
 
     /**
