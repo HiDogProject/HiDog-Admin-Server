@@ -57,8 +57,8 @@ public class SecurityConfig {
         /* 로그인, 로그아웃 E */
         /* 인가(접근 통제) 설정 S*/
         http.authorizeRequests(authorizeRequests -> {
-            authorizeRequests.requestMatchers("/**").hasAnyAuthority("ADMIN")
-                    .anyRequest().permitAll();
+            authorizeRequests.requestMatchers("/**").permitAll();//.hasAnyAuthority("ADMIN")
+                    //.anyRequest().permitAll();
         });
         http.exceptionHandling(c -> {
             c.authenticationEntryPoint(new MemberAuthenticationEntryPoint())//예외
