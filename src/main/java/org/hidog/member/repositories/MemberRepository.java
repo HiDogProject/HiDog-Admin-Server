@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.util.List;
 import java.util.Optional;
 
 @RedisHash
@@ -32,7 +31,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
         QMember member = QMember.member;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(member.email.eq(email))
-                .and(member.userName.eq(member.userName));
+                .and(member.userName.eq(name));
 
         return exists(builder);
     }

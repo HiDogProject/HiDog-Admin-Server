@@ -25,24 +25,18 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length = 40, nullable = false, unique = true)
     private String userName;
 
+    @Column(length = 10, nullable = false)
+    private Long zipcode;
+
     @Column(length = 60, nullable = false)
     private String address;
 
     @Column(length = 60)
     private String detailAddress;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Authority authority; // 권한 필드
-
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
     private List<Authorities> authorities;
-
-    // 권한 설정 메소드
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
 
     /*@Transient
     private FileInfo profileImage; */

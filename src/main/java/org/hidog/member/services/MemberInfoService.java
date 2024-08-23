@@ -4,11 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.hidog.board.controllers.BoardSearch;
-import org.hidog.board.controllers.RequestBoardConfig;
-import org.hidog.board.entities.Board;
-import org.hidog.board.entities.QBoard;
-import org.hidog.board.exceptions.BoardNotFoundException;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
 import org.hidog.member.MemberInfo;
@@ -79,7 +74,7 @@ public class MemberInfoService implements UserDetailsService {
         sopt = StringUtils.hasText(sopt) ? sopt : "ALL"; //통합검색이 기본
 
         //키워드가 존재 할 때, 조건별 검색
-        if (StringUtils.hasText(skey) && StringUtils.hasText(skey.trim())) {
+        if (StringUtils.hasText(skey)) {
             /**
              * sopt 검색옵션
              * ALL - (통합검색) - email, userName
@@ -91,7 +86,7 @@ public class MemberInfoService implements UserDetailsService {
             BooleanExpression condition = null;
 
             if (sopt.equals("ALL")) { //통합검색
-                condition = member.email.concat(member.userName).contains(skey);
+                condition = member.email.contains(skey).or(member.userName.contains(skey));
 
             } else if (sopt.equals("email")) { // 이메일로 검색
                 condition = member.email.contains(skey);
@@ -113,9 +108,8 @@ public class MemberInfoService implements UserDetailsService {
         }
         //페이징 및 정렬 처리
         Pageable pageable = PageRequest.of(page-1, limit, Sort.by(desc("seq")));
-
         //데이터 조회
-        Page<Member> data = MemberRepository.findAll(andBuilder, pageable);
+        Page<Member> data = memberRepository.findAll(andBuilder, pageable);
 
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
 
