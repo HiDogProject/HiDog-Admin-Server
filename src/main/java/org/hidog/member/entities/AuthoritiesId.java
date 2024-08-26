@@ -7,7 +7,6 @@ import org.hidog.member.constants.Authority;
 
 import java.io.Serializable;
 
-
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor

@@ -3,6 +3,7 @@ package org.hidog.member.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hidog.global.entities.BaseEntity;
+import org.hidog.member.constants.Authority;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,6 +24,9 @@ public class Member extends BaseEntity implements Serializable {
 
     @Column(length = 40, nullable = false, unique = true)
     private String userName;
+
+    @Column(length = 10, nullable = false)
+    private Long zipcode;
 
     @Column(length = 60, nullable = false)
     private String address;
