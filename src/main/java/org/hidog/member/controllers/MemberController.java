@@ -1,8 +1,12 @@
 package org.hidog.member.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hidog.board.controllers.RequestBoardConfig;
+import org.hidog.board.controllers.RequestMember;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
+import org.hidog.global.Utils;
 import org.hidog.global.exceptions.ExceptionProcessor;
 import org.hidog.member.constants.Authority;
 import org.hidog.member.entities.Member;
@@ -14,6 +18,7 @@ import org.hidog.menus.MenuDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +33,10 @@ import java.util.List;
 public class MemberController implements ExceptionProcessor {
 
     private final MemberInfoService memberInfoService;
+    private final MemberSaveService memberSaveService;
+    private final MemberDeleteService memberDeleteService;
+
+    private final Utils utils;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() {
@@ -58,6 +67,40 @@ public class MemberController implements ExceptionProcessor {
 
         return "member/list";
     }
+
+    @GetMapping("/authority")
+    public String authority(@ModelAttribute MemberSearch search, Model model) {
+        commonProcess("authority", model);
+
+        ListData<Member> data = memberInfoService.getList(search, true);
+
+        List<Member> items = data.getItems();
+        Pagination pagination = data.getPagination();
+
+        model.addAttribute("items", items);
+        model.addAttribute("pagination", pagination);
+
+        return "member/authority";
+    }
+
+    @PostMapping("/update-authority")
+    public String save(@Valid RequestMember member, Errors errors, Model model) {
+        String mode = config.getMode();
+
+        commonProcess(mode, model);
+
+        configValidator.validate(config, errors);
+
+        if (errors.hasErrors()) {
+            return "member/" + mode;
+        }
+
+        memberSaveService.save(config);
+
+
+        return "redirect:" + utils.redirectUrl("/member");
+    }
+
 
     /**
      * 공통 처리
