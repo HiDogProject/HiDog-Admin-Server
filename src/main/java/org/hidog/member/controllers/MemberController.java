@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hidog.board.controllers.RequestBoardConfig;
 import org.hidog.board.controllers.RequestMember;
+import org.hidog.board.entities.BoardData;
+import org.hidog.board.services.BoardDataService;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
 import org.hidog.global.Utils;
@@ -15,6 +17,7 @@ import org.hidog.member.services.MemberInfoService;
 import org.hidog.member.services.MemberSaveService;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -32,9 +35,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController implements ExceptionProcessor {
 
+    @Autowired
+    private BoardDataService boardDataService;
+
     private final MemberInfoService memberInfoService;
-    private final MemberSaveService memberSaveService;
-    private final MemberDeleteService memberDeleteService;
+    // private final MemberSaveService memberSaveService;
+    // private final MemberDeleteService memberDeleteService;
 
     private final Utils utils;
 
@@ -62,10 +68,45 @@ public class MemberController implements ExceptionProcessor {
         List<Member> items = data.getItems();
         Pagination pagination = data.getPagination();
 
+        items = memberInfoService.getMembersWithStatistics(items);
+
         model.addAttribute("items", items);
         model.addAttribute("pagination", pagination);
 
         return "member/list";
+    }
+
+    @GetMapping("/{memberId}/posts")
+    public String getMemberPosts(@PathVariable("memberId") Long memberId, Model model) {
+        Member member = memberInfoService.findById(memberId);
+        List<BoardData> posts = boardDataService.findPostsByMemberId(memberId);
+
+        model.addAttribute("member", member);
+        model.addAttribute("posts", posts);
+
+        return "member/member-posts";
+    }
+
+    @GetMapping("/{postId}/details")
+    @ResponseBody
+    public String getPostDetails(@PathVariable("postId") Long postId) {
+        BoardData post = boardDataService.findBySeq(postId);
+        if (post == null) {
+            return "<p>게시물을 찾을 수 없습니다.</p>";
+        }
+
+        StringBuilder html = new StringBuilder();
+        html.append("<div class='modal-header'>")
+                .append("<h2>게시물 번호: ").append(post.getSeq()).append("</h2>")
+                .append("<p>작성자: ").append(post.getPoster()).append("</p>")
+                .append("<p>제목: ").append(post.getSubject()).append("</p>")
+                .append("<p>작성일: ").append(post.getCreatedAt()).append("</p>")
+                .append("</div>")
+                .append("<div class='modal-body'>")
+                .append("<p>").append(post.getContent()).append("</p>")
+                .append("</div>");
+
+        return html.toString();
     }
 
     @GetMapping("/authority")
@@ -85,19 +126,6 @@ public class MemberController implements ExceptionProcessor {
 
     @PostMapping("/update-authority")
     public String save(@Valid RequestMember member, Errors errors, Model model) {
-        String mode = config.getMode();
-
-        commonProcess(mode, model);
-
-        configValidator.validate(config, errors);
-
-        if (errors.hasErrors()) {
-            return "member/" + mode;
-        }
-
-        memberSaveService.save(config);
-
-
         return "redirect:" + utils.redirectUrl("/member");
     }
 
@@ -114,14 +142,14 @@ public class MemberController implements ExceptionProcessor {
 
         if (mode.equals("authority")) {
             pageTitle = "회원 권한 수정";
-        } else if (mode.equals("list")) {
-            pageTitle = "회원 목록";
+        } else if (mode.matches("\\d+/posts")) { // 숫자/게시물 패턴
+            pageTitle = "회원 게시물 목록";
         }
 
         List<String> addScript = new ArrayList<>();
 
-        if (mode.equals("authority")) { // 회원 권한 수정
-            addScript.add("member/authority");
+        if (mode.matches("\\d+/posts")) {
+            addScript.add("member");
         }
 
         model.addAttribute("pageTitle", pageTitle);

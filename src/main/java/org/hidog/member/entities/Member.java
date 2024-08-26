@@ -2,6 +2,7 @@ package org.hidog.member.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hidog.file.entities.FileInfo;
 import org.hidog.global.entities.BaseEntity;
 import org.hidog.member.constants.Authority;
 
@@ -35,9 +36,11 @@ public class Member extends BaseEntity implements Serializable {
     private String detailAddress;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Authorities> authorities;
 
-    /*@Transient
-    private FileInfo profileImage; */
+    @Transient
+    private FileInfo profileImage;
+
+    private int postCount = 0;
 }

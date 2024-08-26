@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.hidog.board.repositories.BoardDataRepository;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
 import org.hidog.member.MemberInfo;
@@ -14,6 +15,7 @@ import org.hidog.member.entities.Member;
 import org.hidog.member.entities.QMember;
 import org.hidog.member.repositories.MemberRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +28,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    @Autowired
+    private BoardDataRepository boardDataRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     private final HttpServletRequest request;
 
     @Override
@@ -116,5 +125,26 @@ public class MemberInfoService implements UserDetailsService {
         List<Member> items = data.getContent();
 
         return new ListData<>(items, pagination);
+    }
+    public List<Member> getMembersWithStatistics(List<Member> members) {
+
+        List<Long> memberIds = members.stream()
+                .map(Member::getSeq)
+                .collect(Collectors.toList());
+
+        Map<Long, Integer> postCounts = memberIds.stream()
+                .collect(Collectors.toMap(id -> id, id -> boardDataRepository.countPostsByMember(id)));
+
+        for (Member member : members) {
+            Long memberId = member.getSeq();
+            member.setPostCount(postCounts.get(memberId));
+        }
+
+        return members;
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found with id: " + memberId));
     }
 }

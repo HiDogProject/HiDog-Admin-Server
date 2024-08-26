@@ -5,7 +5,8 @@
 
 <section layout:fragment="content">
     <div th:replace="~{common/_message::message}"></div>
-
+    <h1>회원 설정</h1>
+    <h2>회원 검색</h2>
     <form th:action="${@utils.redirectUrl('/member/authority')}" method="get" th:object="${memberSearch}">
         <table class="table_cols mb30">
             <tr>
@@ -27,14 +28,13 @@
         </div>
     </form>
 
-    <table class="table_cols mb30">
+    <table class="table_rows" style="text-align: center;">
         <thead>
         <tr>
             <th>회원번호</th>
             <th>이메일</th>
             <th>닉네임</th>
             <th>회원등급</th>
-            <th>권한 수정</th>
         </tr>
         </thead>
         <tbody>
@@ -44,8 +44,8 @@
             <td th:text="${member.userName}"></td>
             <td>
                 <form th:action="@{/member/update-authority}" method="post">
-                    <input type="hidden" name="memberEmail" th:value="${member.email}" />
-                    <select name="authority" th:field="*{authority}">
+                    <input type="hidden" name="memberId" th:value="${member.seq}" />
+                    <select name="authority">
                         <option th:value="${T(org.hidog.member.constants.Authority).USER}" th:text="${T(org.hidog.member.constants.Authority).USER}">회원</option>
                         <option th:value="${T(org.hidog.member.constants.Authority).ADMIN}" th:text="${T(org.hidog.member.constants.Authority).ADMIN}">관리자</option>
                     </select>

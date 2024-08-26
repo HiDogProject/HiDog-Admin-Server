@@ -6,7 +6,7 @@
     <section layout:fragment="content">
     <div th:replace="~{common/_message::message}"></div>
         <h1>회원 목록</h1>
-        <h2>회원 조회</h2>
+        <h2>회원 검색</h2>
     <form th:action="${@utils.redirectUrl('/member')}" method="get" th:object="${memberSearch}">
         <table class="table_cols mb30">
             <tr>
@@ -28,13 +28,15 @@
         </div>
     </form>
 
-    <table class="table_rows">
+    <table class="table_rows" style="text-align: center;">
         <thead>
         <tr>
             <th>회원번호</th>
             <th>이메일</th>
             <th>닉네임</th>
             <th>회원등급</th>
+            <th>게시글 수</th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
@@ -46,6 +48,12 @@
                 <ul>
                     <li th:each="auth : ${member.authorities}" th:text="${auth.authority}"></li>
                 </ul>
+            </td>
+            <td th:text="${member.postCount}"></td>
+            <td>
+                <a th:href="@{/member/{memberId}/posts(memberId=${member.seq})}" class="sbtn">
+                    <i class="xi-pen"></i>작성한 글 확인
+                </a>
             </td>
         </tr>
         </tbody>

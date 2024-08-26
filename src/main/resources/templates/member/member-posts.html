@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+
+<section layout:fragment="content">
+    <h1 th:text="${member.userName} + '님의 게시물 목록'"></h1>
+
+    <table class="table_rows" style="text-align: center;">
+        <thead>
+        <tr>
+            <th>게시물 번호</th>
+            <th>제목</th>
+            <th>작성일</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}" onclick="showPostDetails('${post.seq}')" style="cursor: pointer;">
+            <td th:text="${post.seq}"></td>
+            <td th:text="${post.subject}"></td>
+            <td th:text="*{#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}"></td>
+            <td th:text="${post.viewCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody">
+                <!-- Ajax로 로드된 게시물 내용이 여기에 삽입 -->
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+</section>
+</html>
