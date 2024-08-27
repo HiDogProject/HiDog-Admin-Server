@@ -23,8 +23,9 @@ public class BoardDataService {
         // 회원 정보를 기반으로 게시물 목록 조회
         return boardDataRepository.findByMember(member);
     }
-    public BoardData findBySeq(Long seq) {
-        return boardDataRepository.findBySeq(seq)
-                .orElseThrow(() -> new RuntimeException("게시물이 존재하지 않습니다."));
+
+    public BoardData getBoardDataBySeq(Long postSeq) {
+        return boardDataRepository.findById(postSeq).orElse(null);
     }
+
 }

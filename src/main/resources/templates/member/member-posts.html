@@ -16,23 +16,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="post : ${posts}" onclick="showPostDetails('${post.seq}')" style="cursor: pointer;">
+        <tr th:each="post : ${posts}"
+            data-post-seq="${post.seq}"
+            style="cursor: pointer;">
             <td th:text="${post.seq}"></td>
             <td th:text="${post.subject}"></td>
-            <td th:text="*{#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}"></td>
             <td th:text="${post.viewCount}"></td>
         </tr>
         </tbody>
     </table>
 
-    <div id="postModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalBody">
-                <!-- Ajax로 로드된 게시물 내용이 여기에 삽입 -->
-            </div>
-        </div>
-    </div>
 
     <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>

@@ -18,6 +18,7 @@ import org.hidog.member.services.MemberSaveService;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -64,11 +65,8 @@ public class MemberController implements ExceptionProcessor {
         commonProcess("list", model);
 
         ListData<Member> data = memberInfoService.getList(search, true);
-
         List<Member> items = data.getItems();
         Pagination pagination = data.getPagination();
-
-        items = memberInfoService.getMembersWithStatistics(items);
 
         model.addAttribute("items", items);
         model.addAttribute("pagination", pagination);
@@ -76,8 +74,12 @@ public class MemberController implements ExceptionProcessor {
         return "member/list";
     }
 
+
+
     @GetMapping("/{memberId}/posts")
     public String getMemberPosts(@PathVariable("memberId") Long memberId, Model model) {
+        commonProcess("posts", model);
+
         Member member = memberInfoService.findById(memberId);
         List<BoardData> posts = boardDataService.findPostsByMemberId(memberId);
 
@@ -87,27 +89,7 @@ public class MemberController implements ExceptionProcessor {
         return "member/member-posts";
     }
 
-    @GetMapping("/{postId}/details")
-    @ResponseBody
-    public String getPostDetails(@PathVariable("postId") Long postId) {
-        BoardData post = boardDataService.findBySeq(postId);
-        if (post == null) {
-            return "<p>게시물을 찾을 수 없습니다.</p>";
-        }
 
-        StringBuilder html = new StringBuilder();
-        html.append("<div class='modal-header'>")
-                .append("<h2>게시물 번호: ").append(post.getSeq()).append("</h2>")
-                .append("<p>작성자: ").append(post.getPoster()).append("</p>")
-                .append("<p>제목: ").append(post.getSubject()).append("</p>")
-                .append("<p>작성일: ").append(post.getCreatedAt()).append("</p>")
-                .append("</div>")
-                .append("<div class='modal-body'>")
-                .append("<p>").append(post.getContent()).append("</p>")
-                .append("</div>");
-
-        return html.toString();
-    }
 
     @GetMapping("/authority")
     public String authority(@ModelAttribute MemberSearch search, Model model) {
@@ -137,18 +119,21 @@ public class MemberController implements ExceptionProcessor {
      * @param model
      */
     private void commonProcess(String mode, Model model) {
+        // 현재 mode 값 출력
+        System.out.println("현재 mode 값: " + mode);
+
         String pageTitle = "회원 목록";
         mode = StringUtils.hasText(mode) ? mode : "list";
 
         if (mode.equals("authority")) {
             pageTitle = "회원 권한 수정";
-        } else if (mode.matches("\\d+/posts")) { // 숫자/게시물 패턴
+        } else if (mode.equals("posts")) {
             pageTitle = "회원 게시물 목록";
         }
 
         List<String> addScript = new ArrayList<>();
 
-        if (mode.matches("\\d+/posts")) {
+        if (mode.equals("posts")) {
             addScript.add("member");
         }
 

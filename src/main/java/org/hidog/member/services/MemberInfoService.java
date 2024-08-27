@@ -126,22 +126,6 @@ public class MemberInfoService implements UserDetailsService {
 
         return new ListData<>(items, pagination);
     }
-    public List<Member> getMembersWithStatistics(List<Member> members) {
-
-        List<Long> memberIds = members.stream()
-                .map(Member::getSeq)
-                .collect(Collectors.toList());
-
-        Map<Long, Integer> postCounts = memberIds.stream()
-                .collect(Collectors.toMap(id -> id, id -> boardDataRepository.countPostsByMember(id)));
-
-        for (Member member : members) {
-            Long memberId = member.getSeq();
-            member.setPostCount(postCounts.get(memberId));
-        }
-
-        return members;
-    }
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)

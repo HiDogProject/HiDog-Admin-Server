@@ -14,9 +14,6 @@ import java.util.Optional;
 public interface BoardDataRepository extends JpaRepository<BoardData, Long>, QuerydslPredicateExecutor<BoardData> {
     BoardData findByLongText1(String longText1);
 
-    @Query("SELECT COUNT(b) FROM BoardData b WHERE b.member.seq = :memberSeq")
-    int countPostsByMember(@Param("memberSeq") Long memberSeq);
-
     List<BoardData> findByMember(Member member);
 
     Optional<BoardData> findBySeq(Long seq);
