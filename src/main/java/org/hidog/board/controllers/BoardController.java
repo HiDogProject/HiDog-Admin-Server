@@ -3,9 +3,11 @@ package org.hidog.board.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hidog.board.entities.Board;
+import org.hidog.board.entities.BoardData;
 import org.hidog.board.services.BoardConfigDeleteService;
 import org.hidog.board.services.BoardConfigInfoService;
 import org.hidog.board.services.BoardConfigSaveService;
+import org.hidog.board.services.BoardInfoService;
 import org.hidog.board.validators.BoardConfigValidator;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
@@ -30,17 +32,17 @@ public class BoardController implements ExceptionProcessor {
     private final BoardConfigSaveService configSaveService;
     private final BoardConfigInfoService configInfoService;
     private final BoardConfigDeleteService configDeleteService;
+    private final BoardInfoService boardInfoService;
 
-    private final BoardConfigValidator validator;
+    private final BoardConfigValidator configValidator;
+    private final Utils utils;
+
 
     @ModelAttribute
     public RequestBoardConfig requestBoardConfig() {
         return new RequestBoardConfig();
     }
 
-
-    private final BoardConfigValidator configValidator;
-    private final Utils utils;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() { // 주 메뉴 코드
@@ -160,9 +162,12 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/posts")
-    public String posts(Model model) {
+    public String posts(@ModelAttribute BoardDataSearch search, Model model) {
         commonProcess("posts", model);
 
+        ListData<BoardData> data = boardInfoService.getList(search);
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
         return "board/posts";
     }
 
