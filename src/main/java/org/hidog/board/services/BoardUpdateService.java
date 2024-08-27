@@ -26,7 +26,7 @@ public class BoardUpdateService {
     private final ObjectMapper om;
     private final Utils utils;
 
-    public List<BoardData> update(String mode, List<BoardData> items){
+    public void update(String mode, List<BoardData> items){
         mode = StringUtils.hasText(mode) ? mode : "update";
         String url = utils.url("/board/admin" + mode, "front-service");
         Map<String, List<BoardData>> params = new HashMap<>();
@@ -38,16 +38,13 @@ public class BoardUpdateService {
             HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.POST, request, String.class);
-            System.out.println(response);
 
         }catch(JsonProcessingException e){
             e.printStackTrace();
         }
-        return null;
     }
 
-    public BoardData update(String mode, RequestBoard form){
+    public void update(String mode, RequestBoard form){
         mode = StringUtils.hasText(mode) ? mode : mode;
-        return null;
     }
 }
