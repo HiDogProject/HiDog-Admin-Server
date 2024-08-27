@@ -7,6 +7,8 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -22,6 +24,8 @@ public class Utils { // 빈의 이름 - utils
     private final MessageSource messageSource;
     private final HttpServletRequest request;
     private final DiscoveryClient discoveryClient;
+    private final HttpSession httpSession;
+
 
     private static final ResourceBundle commonsBundle;
     private static final ResourceBundle validationsBundle;
@@ -33,8 +37,30 @@ public class Utils { // 빈의 이름 - utils
         errorsBundle = ResourceBundle.getBundle("messages.errors");
     }
 
+    public HttpHeaders getCommonHeaders(String method) {
+
+
+        HttpHeaders headers = new HttpHeaders();
+
+        if (!List.of("GET", "DELETE").contains(method)) { // GET, DELETE 이외 방식은 모두 Body 데이터 있다.
+            headers.setContentType(MediaType.APPLICATION_JSON);
+        }
+
+        return headers;
+    }
+
     public String url(String url) { //Admin서버의 정적자원 사용 할때
         List<ServiceInstance> instances = discoveryClient.getInstances("admin-service");
+
+        try {
+            return String.format("%s%s", instances.get(0).getUri().toString(), url);
+        } catch (Exception e) {
+            return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+        }
+    }
+
+    public String url(String url, String serviceId) {
+        List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
 
         try {
             return String.format("%s%s", instances.get(0).getUri().toString(), url);
