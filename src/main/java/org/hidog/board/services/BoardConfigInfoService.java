@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
@@ -48,7 +47,7 @@ public class BoardConfigInfoService {
     //게시판 리스트 출력
     public List<String[]> getBoardList(){
 
-        return boardRepository.findAll().stream().map(item -> new String[] { item.getBid(), item.getBName()}).toList();
+        return boardRepository.findAll().stream().map(item -> new String[] { item.getBid(), item.getBName(), item.getSkin()}).toList();
     }
 
 
