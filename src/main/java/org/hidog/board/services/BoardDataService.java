@@ -1,5 +1,6 @@
 package org.hidog.board.services;
 
+import lombok.RequiredArgsConstructor;
 import org.hidog.board.entities.BoardData;
 import org.hidog.member.entities.Member;
 import org.hidog.member.services.MemberInfoService;

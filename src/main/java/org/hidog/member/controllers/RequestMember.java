@@ -1,4 +1,4 @@
-package org.hidog.board.controllers;
+package org.hidog.member.controllers;
 
 public class RequestMember {
 

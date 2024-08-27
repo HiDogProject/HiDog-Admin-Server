@@ -4,7 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.hidog.board.repositories.BoardDataRepository;
 import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
 import org.hidog.member.MemberInfo;
@@ -14,7 +13,6 @@ import org.hidog.member.entities.Authorities;
 import org.hidog.member.entities.Member;
 import org.hidog.member.entities.QMember;
 import org.hidog.member.repositories.MemberRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,8 +35,6 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
-    @Autowired
-    private BoardDataRepository boardDataRepository;
 
     @Autowired
     private MemberRepository memberRepository;
