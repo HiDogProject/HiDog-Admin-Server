@@ -10,6 +10,7 @@
         th:text="${#strings.concat(pageTitle, ' - ')}"></th:block>
         사이트 제목
     </title>
+    <link rel="stylesheet" type="text/css" th:href="${@utils.url('/css/style.css')}">
     <link th:if="${addCss != null}" rel="stylesheet" type="text/css"
           th:each="cssFile: ${addCss}" th:href="${@utils.url(#strings.concat('/css/', cssFile, '.css'))}">
     <th:block layout:fragment="addCss"></th:block>

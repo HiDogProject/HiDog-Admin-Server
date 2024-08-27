@@ -49,9 +49,16 @@ public class Utils { // 빈의 이름 - utils
         return headers;
     }
 
-    private String url(String url){//Admin서버의 정적자원 사용 할때
-        return url(url, "admin-service");
+    public String url(String url) { //Admin서버의 정적자원 사용 할때
+        List<ServiceInstance> instances = discoveryClient.getInstances("admin-service");
+
+        try {
+            return String.format("%s%s", instances.get(0).getUri().toString(), url);
+        } catch (Exception e) {
+            return String.format("%s://%s:%d%s%s", request.getScheme(), request.getServerName(), request.getServerPort(), request.getContextPath(), url);
+        }
     }
+
     public String url(String url, String serviceId) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
 
