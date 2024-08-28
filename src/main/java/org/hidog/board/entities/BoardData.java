@@ -25,8 +25,7 @@ import java.util.List;
 }) // @Index : 빠르게 조회위해 사용
 // notice DESC : 공지는 항상 앞에 나와야 하니 orderby desc, createdAt DESC : 최신글이 먼저 나오도록
 public class BoardData extends BaseEntity { // extends BaseEntity : 날짜와 시간
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long seq; // 게시글 번호
 
     @ManyToOne(fetch = FetchType.LAZY) // 게시판입장에서 게시글은 여러개 // many가 관계의 주인, 외래키도 있는 곳
@@ -145,5 +144,4 @@ public class BoardData extends BaseEntity { // extends BaseEntity : 날짜와 �
 
     @Transient
     private String formattedCreatedAt; // 게시글 조회용 날짜
-
 }

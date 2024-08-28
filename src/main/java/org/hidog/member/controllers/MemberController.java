@@ -13,6 +13,7 @@ import org.hidog.member.services.MemberInfoService;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -68,8 +69,6 @@ public class MemberController implements ExceptionProcessor {
         return "member/list";
     }
 
-
-
     @GetMapping("/{memberId}/posts")
     public String getMemberPosts(@PathVariable("memberId") Long memberId, Model model) {
         commonProcess("posts", model);
@@ -82,8 +81,6 @@ public class MemberController implements ExceptionProcessor {
 
         return "member/member-posts";
     }
-
-
 
     @GetMapping("/authority")
     public String authority(@ModelAttribute MemberSearch search, Model model) {
@@ -113,8 +110,6 @@ public class MemberController implements ExceptionProcessor {
      * @param model
      */
     private void commonProcess(String mode, Model model) {
-        // 현재 mode 값 출력
-        System.out.println("현재 mode 값: " + mode);
 
         String pageTitle = "회원 목록";
         mode = StringUtils.hasText(mode) ? mode : "list";

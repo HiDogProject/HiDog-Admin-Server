@@ -16,6 +16,5 @@ public interface BoardDataRepository extends JpaRepository<BoardData, Long>, Que
 
     List<BoardData> findByMember(Member member);
 
-    Optional<BoardData> findBySeq(Long seq);
 }
 
