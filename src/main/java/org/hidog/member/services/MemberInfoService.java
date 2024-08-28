@@ -13,7 +13,7 @@ import org.hidog.member.entities.Authorities;
 import org.hidog.member.entities.Member;
 import org.hidog.member.entities.QMember;
 import org.hidog.member.repositories.MemberRepository;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +26,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     private final HttpServletRequest request;
 
     @Override
@@ -116,5 +121,10 @@ public class MemberInfoService implements UserDetailsService {
         List<Member> items = data.getContent();
 
         return new ListData<>(items, pagination);
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found with id: " + memberId));
     }
 }

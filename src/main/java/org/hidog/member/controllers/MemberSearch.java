@@ -14,4 +14,6 @@ public class MemberSearch extends CommonSearch {
 
     private String email;
     private String userName;
+
+    private String authority;
 }
