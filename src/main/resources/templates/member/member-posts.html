@@ -30,15 +30,15 @@
     </table>
 
     <!-- 모달 HTML -->
-    <div id="postModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 600px; background: white; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 1000;">
+    <div id="postModal">
         <div style="padding: 20px;">
-            <span id="closeModal" style="cursor: pointer; float: right;">&times;</span>
+            <span id="closeModal">&times;</span>
             <h2 id="postTitle"></h2>
             <p id="postContent"></p>
         </div>
     </div>
 
-    <div id="modalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+    <div id="modalOverlay"></div>
 
     <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>
