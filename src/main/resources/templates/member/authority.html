@@ -34,7 +34,8 @@
             <th>회원번호</th>
             <th>이메일</th>
             <th>닉네임</th>
-            <th>회원등급</th>
+            <th>회원 권한</th>
+            <th>권한 수정</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,11 @@
             <td th:text="${member.seq}"></td>
             <td th:text="${member.email}"></td>
             <td th:text="${member.userName}"></td>
+            <td>
+                <ul>
+                    <li th:each="auth : ${member.authorities}" th:text="${auth.authority}"></li>
+                </ul>
+            </td>
             <td>
                 <form th:action="${@utils.redirectUrl('/member/update-authority')}" method="post">
                     <input type="hidden" name="memberId" th:value="${member.seq}" />
