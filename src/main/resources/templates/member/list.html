@@ -49,7 +49,7 @@
                 </ul>
             </td>
             <td>
-                <a th:href="@{/member/{memberId}/posts(memberId=${member.seq})}" class="sbtn">
+                <a th:href="${@utils.redirectUrl('/member/' + member.seq + '/posts')}" class="sbtn">
                     <i class="xi-pen"></i>작성한 글 확인
                 </a>
             </td>

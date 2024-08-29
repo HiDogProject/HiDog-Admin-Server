@@ -43,7 +43,7 @@
             <td th:text="${member.email}"></td>
             <td th:text="${member.userName}"></td>
             <td>
-                <form th:action="@{/member/update-authority}" method="post">
+                <form th:action="${@utils.redirectUrl('/member/update-authority')}" method="post">
                     <input type="hidden" name="memberId" th:value="${member.seq}" />
                     <select name="authority">
                         <option th:value="${T(org.hidog.member.constants.Authority).USER}" th:text="${T(org.hidog.member.constants.Authority).USER}">회원</option>
@@ -55,5 +55,6 @@
         </tr>
         </tbody>
     </table>
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>
 </html>

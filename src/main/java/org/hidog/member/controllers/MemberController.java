@@ -8,17 +8,19 @@ import org.hidog.global.ListData;
 import org.hidog.global.Pagination;
 import org.hidog.global.Utils;
 import org.hidog.global.exceptions.ExceptionProcessor;
+import org.hidog.member.constants.Authority;
 import org.hidog.member.entities.Member;
 import org.hidog.member.services.MemberInfoService;
+import org.hidog.member.services.MemberSaveService;
 import org.hidog.menus.Menu;
 import org.hidog.menus.MenuDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,7 @@ public class MemberController implements ExceptionProcessor {
     private BoardDataService boardDataService;
 
     private final MemberInfoService memberInfoService;
-    // private final MemberSaveService memberSaveService;
-    // private final MemberDeleteService memberDeleteService;
+    private final MemberSaveService memberSaveService;
 
     private final Utils utils;
 
@@ -98,8 +99,13 @@ public class MemberController implements ExceptionProcessor {
     }
 
     @PostMapping("/update-authority")
-    public String save(@Valid RequestMember member, Errors errors, Model model) {
-        return "redirect:" + utils.redirectUrl("/member");
+    public String updateAuthority(
+            @RequestParam("memberId") Long memberId,
+            @RequestParam("authority") Authority newAuthority) {
+
+        memberSaveService.updateAuthority(memberId, newAuthority);
+
+        return "redirect:/member/authority";
     }
 
 
