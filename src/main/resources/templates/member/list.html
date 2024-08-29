@@ -34,7 +34,7 @@
             <th>회원번호</th>
             <th>이메일</th>
             <th>닉네임</th>
-            <th>회원등급</th>
+            <th>회원 권한</th>
             <th>작성한 글</th>
         </tr>
         </thead>
@@ -49,7 +49,7 @@
                 </ul>
             </td>
             <td>
-                <a th:href="@{/member/{memberId}/posts(memberId=${member.seq})}" class="sbtn">
+                <a th:href="${@utils.redirectUrl('/member/' + member.seq + '/posts')}" class="sbtn">
                     <i class="xi-pen"></i>작성한 글 확인
                 </a>
             </td>
