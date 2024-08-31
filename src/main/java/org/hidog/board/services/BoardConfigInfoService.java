@@ -39,8 +39,7 @@ public class BoardConfigInfoService {
 
         addBoardInfo(board);
 
-        //추가 데이터 처리
-
+        //추가 데이터hido
         return board;
     }
 

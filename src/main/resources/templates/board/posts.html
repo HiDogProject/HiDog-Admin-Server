@@ -31,7 +31,6 @@
                 <td th:text="*{seq}"></td>
                 <td>
                     <th:block th:text="*{poster}"></th:block>
-                    <th:block th:if="*{member != null}" th:text="*{strings.concat('(' +  member.email + ')')}"></th:block>
                 </td>
                 <td th:text="*{subject}"></td>
                 <td th:text="*{createdAt}"></td>
