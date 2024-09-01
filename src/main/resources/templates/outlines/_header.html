@@ -10,7 +10,7 @@
     </section>
     <section class="btn_area">
         <th:block sec:authorize="isAuthenticated()">
-            <a th:href="${@utils.frontUrl('/member/info')}" target="_blank">회원정보 수정</a>
+            <a th:href="${@utils.redirectUrl('/member/authority')}">회원정보 수정</a>
             <a th:href="${@utils.frontUrl('/member/logout')}">로그아웃</a>
         </th:block>
         <th:block sec:authorize="isAnonymous()">
