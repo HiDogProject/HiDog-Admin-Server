@@ -84,8 +84,13 @@ public class Utils { // 빈의 이름 - utils
         String gatewayHost = Objects.requireNonNullElse(request.getHeader("gateway-host"), "");
         boolean fromGateway = _fromGateway.equals("true");
 
+        if (gatewayHost.equals("@http_host")) {
+            gatewayHost = "hidog.xyz";
+        }
+
         return fromGateway ? request.getScheme() + "://" + gatewayHost + "/admin" + url : request.getContextPath() + url;
     }
+
 
 
     public Map<String, List<String>> getErrorMessages(Errors errors) {//JSON 받을 때는 에러를 직접 가공
