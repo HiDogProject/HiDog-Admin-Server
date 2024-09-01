@@ -3,7 +3,10 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="common">
     <section class="logo_area">
-        <a th:href="${@utils.url('/')}">로고</a>
+        <a th:href="${@utils.url('/')}">
+            <img th:src="${@utils.url('/img/Logo.png')}" alt="HI DOG LOGO">
+        </a>
+
     </section>
     <section class="btn_area">
         <th:block sec:authorize="isAuthenticated()">
