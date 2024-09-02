@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const postContent = this.getAttribute('data-post-content');
 
             // <p> 및 </p> 태그 제거
-            const plainTextContent = postContent.replace(/<p[^>]*>|<\/p>/g, "");
+            const plainTextContent = postContent
+                .replace(/<p[^>]*>|<\/p>/g, "")
+                .replace(/<br\s*\/?>/gi, "")
+                .replace(/&nbsp;/gi, " ");
 
             // 모달에 데이터 삽입
             document.getElementById('postTitle').textContent = postTitle;
